@@ -17,10 +17,17 @@ const GITHUB_RAW_BASE =
   process.env.REGISTRY_BASE_URL ||
   "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r";
 
-
 console.log("📦 构建 arc-foundation.json...");
 const foundationCssPath = path.join(REGISTRY_DIR, "foundation.css");
 const motionTokensPath = path.join(REGISTRY_DIR, "motion-tokens.ts");
+const morphWidthPath = path.join(REGISTRY_DIR, "composables", "use-morph-width.ts");
+const reducedMotionPath = path.join(REGISTRY_DIR, "composables", "use-reduced-motion.ts");
+
+let morphWidthContent = fs.readFileSync(morphWidthPath, "utf-8");
+morphWidthContent = morphWidthContent.replace(
+  /from\s+["\x27]@\/registry\/motion-tokens["\x27]/g,
+  'from "./motion-tokens"'
+);
 
 const foundationItem = {
   $schema: "https://shadcn-vue.com/schema/registry-item.json",
@@ -35,32 +42,26 @@ const foundationItem = {
     {
       path: "registry/foundation.css",
       type: "registry:file",
-      target: "~/registry/foundation.css",
+      target: "~/components/ui/foundation.css",
       content: fs.readFileSync(foundationCssPath, "utf-8"),
     },
     {
       path: "registry/motion-tokens.ts",
       type: "registry:file",
-      target: "~/registry/motion-tokens.ts",
+      target: "~/components/ui/motion-tokens.ts",
       content: fs.readFileSync(motionTokensPath, "utf-8"),
     },
     {
       path: "registry/composables/use-morph-width.ts",
       type: "registry:file",
-      target: "~/registry/composables/use-morph-width.ts",
-      content: fs.readFileSync(
-        path.join(REGISTRY_DIR, "composables", "use-morph-width.ts"),
-        "utf-8"
-      ),
+      target: "~/components/ui/use-morph-width.ts",
+      content: morphWidthContent,
     },
     {
       path: "registry/composables/use-reduced-motion.ts",
       type: "registry:file",
-      target: "~/registry/composables/use-reduced-motion.ts",
-      content: fs.readFileSync(
-        path.join(REGISTRY_DIR, "composables", "use-reduced-motion.ts"),
-        "utf-8"
-      ),
+      target: "~/components/ui/use-reduced-motion.ts",
+      content: fs.readFileSync(reducedMotionPath, "utf-8"),
     },
   ],
 };
@@ -94,7 +95,7 @@ for (const dirent of componentFolders) {
 
   for (const file of files) {
     const filePath = path.join(compFolderPath, file);
-    const content = fs.readFileSync(filePath, "utf-8");
+    let content = fs.readFileSync(filePath, "utf-8");
 
     if (content.includes("lucide-vue-next")) {
       dependencies.add("lucide-vue-next");
@@ -105,6 +106,12 @@ for (const dirent of componentFolders) {
     if (content.includes("@vueuse/core")) {
       dependencies.add("@vueuse/core");
     }
+
+    // 将跨目录别名转化为相对路径，防止 shadcn CLI 别名重写造成的丢失或 components.json 命名空间冲突
+    content = content
+      .replace(/from\s+["\x27]@\/registry\/motion-tokens["\x27]/g, 'from "../motion-tokens"')
+      .replace(/from\s+["\x27]@\/registry\/composables\/use-morph-width["\x27]/g, 'from "../use-morph-width"')
+      .replace(/from\s+["\x27]@\/registry\/composables\/use-reduced-motion["\x27]/g, 'from "../use-reduced-motion"');
 
     registryFiles.push({
       path: `registry/components/${compName}/${file}`,
@@ -131,10 +138,8 @@ for (const dirent of componentFolders) {
     files: registryFiles,
   };
 
-  fs.writeFileSync(
-    path.join(PUBLIC_R_DIR, `${compName}.json`),
-    JSON.stringify(compRegistryItem, null, 2)
-  );
+  const outputJsonPath = path.join(PUBLIC_R_DIR, `${compName}.json`);
+  fs.writeFileSync(outputJsonPath, JSON.stringify(compRegistryItem, null, 2));
 
   registryIndex.push({
     name: compName,
@@ -151,4 +156,6 @@ fs.writeFileSync(
   JSON.stringify(registryIndex, null, 2)
 );
 
-console.log("🎉 所有 Registry 描述文件构建完成！共计生成:", registryIndex.length, "项");
+console.log(
+  `🎉 所有 Registry 描述文件构建完成！共计生成: ${registryIndex.length} 项\n`
+);
