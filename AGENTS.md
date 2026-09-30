@@ -69,4 +69,10 @@
      - 深度重构并 100% 真实实装全部 99 个组件的 Vue 3 SFC 交互、模板结构、物理弹簧与动画，杜绝空壳与单纯占位；
      - 核心复合组件（如 Tabs 套件、Card、Drawer、BottomSheet、Toast/ToastStack、DropdownMenu、Popover、Pagination、ActivityHeatmap、CommandPalette、Gauge 等）均完成基于 `motion-v` 与 `reka-ui` 的物理级还原；
      - 运行 `scripts/build-registry.js`，全部 100 项标准 JSON 注册表（包含 1 个 Foundation 与 99 个组件）在 `public/r/` 重新编译输出完毕，完全配置为直连 GitHub Raw 拉取。
+  12. 发布与开源推送完成：
+     - 将所有注册表直链统一重定向至目标仓库 `NingZeStudio/uiarc-vue`；
+     - 切换 npm 官方源并完成账号认证（`ningzestu`）；
+     - 对齐上游版本号 `1.0.0`；
+     - 在 GitHub 上成功创建并公开推送全部代码至 `https://github.com/NingZeStudio/uiarc-vue`；
+     - 成功通过 npm 2FA 认证并发布首个正式包 `uiarc-vue@1.0.0` 至 npm 官方 Registry。
 
