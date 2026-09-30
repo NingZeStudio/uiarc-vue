@@ -44,6 +44,24 @@ const foundationItem = {
       target: "~/registry/motion-tokens.ts",
       content: fs.readFileSync(motionTokensPath, "utf-8"),
     },
+    {
+      path: "registry/composables/use-morph-width.ts",
+      type: "registry:file",
+      target: "~/registry/composables/use-morph-width.ts",
+      content: fs.readFileSync(
+        path.join(REGISTRY_DIR, "composables", "use-morph-width.ts"),
+        "utf-8"
+      ),
+    },
+    {
+      path: "registry/composables/use-reduced-motion.ts",
+      type: "registry:file",
+      target: "~/registry/composables/use-reduced-motion.ts",
+      content: fs.readFileSync(
+        path.join(REGISTRY_DIR, "composables", "use-reduced-motion.ts"),
+        "utf-8"
+      ),
+    },
   ],
 };
 
