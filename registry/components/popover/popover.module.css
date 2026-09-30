@@ -31,3 +31,6 @@
 @media (prefers-reduced-motion: reduce) {
   .content, .content[data-state="closed"] { transform: none; transition: opacity var(--duration-instant) linear; }
 }
+
+/* Vue SFC alias */
+.container { composes: content; }

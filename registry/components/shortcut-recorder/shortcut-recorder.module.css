@@ -83,3 +83,11 @@
   .kbd[data-pressed] { transform: none; }
   .dot { animation: none; }
 }
+
+/* Vue SFC alias */
+.recording { border-color: var(--accent) !important; box-shadow: 0 0 0 2px var(--accent-subtle); }
+.disabled { opacity: 0.5; pointer-events: none; }
+.badge { composes: chipSlot; }
+.recordingText { composes: messageText; color: var(--accent); }
+.shortcutText { composes: kbd; }
+.resetButton { composes: action; }

@@ -21,3 +21,9 @@
 .column > span { display: inline-block; }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .control { transition: none; } }
+
+/* Vue SFC alias */
+.label { font-size: var(--text-sm); font-weight: 500; color: var(--foreground); margin-bottom: var(--space-1); }
+.shell { composes: control; }
+.textarea { width: 100%; min-height: 80px; padding: var(--space-3); background: transparent; border: none; outline: none; font: inherit; color: var(--foreground); resize: vertical; }
+.message { composes: messageSlot; }

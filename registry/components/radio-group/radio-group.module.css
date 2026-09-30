@@ -31,3 +31,11 @@
 .option:has(input:checked) strong { color: var(--foreground); }
 .option small { margin-top: 2px; color: var(--text-muted); font-size: var(--text-xs); }
 @media (prefers-reduced-motion: reduce) { .option, .mark, .mark::after, .option strong { transition: none; } .option:active .mark { transform: none; } }
+
+/* Vue SFC alias */
+.legend { font-size: var(--text-sm); font-weight: 500; margin-bottom: var(--space-2); color: var(--foreground); }
+.selected { composes: highlight; }
+.input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+.content { composes: options; }
+.optLabel { font-size: var(--text-sm); font-weight: 500; color: var(--foreground); }
+.optDesc { font-size: var(--text-xs); color: var(--text-muted); }

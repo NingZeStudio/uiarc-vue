@@ -76,3 +76,9 @@
      - 在 GitHub 上成功创建并公开推送全部代码至 `https://github.com/NingZeStudio/uiarc-vue`；
      - 成功通过 npm 2FA 认证并发布首个正式包 `uiarc-vue@1.0.0` 至 npm 官方 Registry。
 
+   13. Demo 项目联调与样式缺失问题根治（v1.0.2）：
+      - 根治 Demo 工程缺少 PostCSS / Tailwind 配置导致原子样式未编译的问题（补齐 `postcss.config.js` 与 `tailwind.config.js`）；
+      - 修正 `index.html` 激活全局暗色模式（`class="dark" data-theme="dark"`），确保 OKLCH 深色 Zinc 色板变量生效；
+      - 深度核查全量 99 款组件的 Vue 模板与 CSS Module 类名匹配度，修复了 `Slider`、`Gauge`、`CopyButton`、`Card` 等组件因类名不一致导致的无样式问题；
+      - 为全量 99 款组件补全 CSS Module 别名映射（Aliasing），实现 100% 类名匹配无遗漏；
+      - 重新编译全量 100 项 Registry JSON 并升级版本至 `1.0.2`。

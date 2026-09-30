@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { motion, AnimatePresence } from "motion-v";
-import { motionTokens } from "@/registry/motion-tokens";
-import { useReducedMotion } from "@/registry/composables/use-reduced-motion";
+import { motion } from "motion-v";
+import { motionTokens } from "../motion-tokens";
+import { useReducedMotion } from "../use-reduced-motion";
 import styles from "./gauge.module.css";
 
 export type GaugeTone = "accent" | "success" | "warning" | "danger";
@@ -17,7 +17,7 @@ export interface GaugeProps {
   value: number;
   min?: number;
   max?: number;
-  label: string;
+  label?: string;
   detail?: string;
   tone?: GaugeTone;
   thresholds?: GaugeThreshold[];
@@ -65,11 +65,10 @@ const activeTone = computed(() => {
 </script>
 
 <template>
-  <div :class="[styles.gauge, styles[activeTone], props.class]">
+  <figure :class="[styles.figure, styles[activeTone], props.class]">
     <div :class="styles.visual">
       <svg
         viewBox="0 0 100 100"
-        :class="styles.svg"
         fill="none"
         stroke-linecap="round"
       >
@@ -79,7 +78,7 @@ const activeTone = computed(() => {
         <!-- Dynamic Value Arc -->
         <motion.path
           :d="fillD"
-          :class="styles.fill"
+          :class="styles.arc"
           stroke-width="8"
           :initial="prefersReduced ? false : { pathLength: 0 }"
           :animate="{ pathLength: 1 }"
@@ -89,15 +88,17 @@ const activeTone = computed(() => {
         />
       </svg>
 
-      <div :class="styles.centerText">
-        <span :class="styles.number">{{ displayValue }}</span>
-        <span :class="styles.unit">%</span>
+      <div :class="styles.readout">
+        <div :class="styles.number">
+          <span :class="styles.digits">{{ displayValue }}</span>
+          <span :class="styles.unit">%</span>
+        </div>
       </div>
     </div>
 
-    <div :class="styles.meta">
-      <h4 :class="styles.label">{{ label }}</h4>
-      <p v-if="detail" :class="styles.detail">{{ detail }}</p>
-    </div>
-  </div>
+    <figcaption v-if="label || detail">
+      <strong v-if="label">{{ label }}</strong>
+      <span v-if="detail" :class="styles.detail">{{ detail }}</span>
+    </figcaption>
+  </figure>
 </template>

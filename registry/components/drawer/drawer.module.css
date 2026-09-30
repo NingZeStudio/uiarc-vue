@@ -93,3 +93,9 @@
   .close, .close:active { transition: none; }
   .close:active { transform: none; }
 }
+
+/* Vue SFC alias */
+.backdrop { composes: overlay; }
+.panel { composes: content; }
+.titleGroup { composes: header; }
+.footer { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-3); padding: var(--space-4) var(--space-6); border-top: 1px solid var(--border); }

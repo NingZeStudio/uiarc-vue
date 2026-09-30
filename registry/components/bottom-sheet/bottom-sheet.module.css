@@ -69,3 +69,10 @@
 @media (prefers-reduced-motion: reduce) {
   .header::after, .grabberBar, .close { transition: none; }
 }
+
+/* Vue SFC alias */
+.backdrop { composes: overlay; }
+.handleWrap { composes: grabber; }
+.handle { composes: grabberBar; }
+.titleGroup { composes: headText; }
+.content { composes: body; }

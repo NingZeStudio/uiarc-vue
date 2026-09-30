@@ -37,3 +37,9 @@
   .trigger, .chevron, .item, .highlight { transition: none; }
   .menu, .menu[data-state="closed"] { transform: none; transition: opacity var(--duration-instant) linear; }
 }
+
+/* Vue SFC alias */
+.container { composes: menu; }
+.highlighted { composes: highlight; }
+.highlightDestructive { composes: highlight; color: var(--danger) !important; }
+.itemLabel { composes: labelText; }

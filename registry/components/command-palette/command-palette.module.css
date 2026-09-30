@@ -99,3 +99,16 @@
   .searchRow, .itemIcon, .resultArrow, .clearButton, .closeButton { transition: none; }
   .activeResult .resultArrow { transform: none; }
 }
+
+/* Vue SFC alias */
+.overlay { composes: palette; }
+.backdrop { composes: resultsFrame; }
+.searchBar { composes: searchRow; }
+.input { width: 100%; background: transparent; border: none; outline: none; color: var(--foreground); font: inherit; }
+.list { composes: results; }
+.item { composes: result; }
+.active { composes: activeResult; }
+.itemContent { composes: resultCopy; }
+.itemLabel { font-weight: 500; color: var(--foreground); }
+.itemDesc { font-size: var(--text-xs); color: var(--text-muted); }
+.enterIcon { composes: resultArrow; }

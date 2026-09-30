@@ -14,3 +14,7 @@
 .dismiss:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 @media (hover: hover) and (pointer: fine) { .dismiss:hover { background: var(--surface-muted); color: var(--foreground); } }
 @media (prefers-reduced-motion: reduce) { .dismiss { transition: none; } .dismiss:active { transform: none; } }
+
+/* Vue SFC alias */
+.iconWrap { composes: icon; }
+.titleWrap { composes: content; }

@@ -62,3 +62,12 @@
   .menu[data-state="closed"] { animation: menu-fade-out 100ms linear both; }
   .menu[data-state="open"] .item { animation: none; }
 }
+
+/* Vue SFC alias */
+.container { composes: surface; }
+.actions { composes: layer; }
+.leading { composes: layer; }
+.actionButton { composes: more; }
+.actionLabel { composes: label; }
+.rowSurface { composes: content; }
+.trailing { composes: layer; }

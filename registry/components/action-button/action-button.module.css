@@ -18,3 +18,6 @@
 .visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .button { transition: none; } .spinner { animation: none; } }
+
+/* Vue SFC alias */
+.text { display: inline-flex; align-items: center; justify-content: center; gap: inherit; }

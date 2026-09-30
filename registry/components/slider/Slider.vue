@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onUnmounted } from "vue";
 import { motion, AnimatePresence } from "motion-v";
-import { motionTokens } from "@/registry/motion-tokens";
-import { useReducedMotion } from "@/registry/composables/use-reduced-motion";
+import { motionTokens } from "../motion-tokens";
+import { useReducedMotion } from "../use-reduced-motion";
 import styles from "./slider.module.css";
 
 export interface SliderMark {
@@ -37,7 +37,7 @@ const emit = defineEmits<{
 }>();
 
 const prefersReduced = useReducedMotion();
-const trackRef = ref<HTMLDivElement | null>(null);
+const controlRef = ref<HTMLDivElement | null>(null);
 const isDragging = ref(false);
 const isHovered = ref(false);
 
@@ -72,8 +72,8 @@ const normalizedMarks = computed(() => {
 });
 
 const updateValueFromPointer = (clientX: number) => {
-  if (!trackRef.value || props.disabled) return;
-  const rect = trackRef.value.getBoundingClientRect();
+  if (!controlRef.value || props.disabled) return;
+  const rect = controlRef.value.getBoundingClientRect();
   const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
   const rawValue = props.min + ratio * (props.max - props.min);
   const steppedValue = Math.round((rawValue - props.min) / props.step) * props.step + props.min;
@@ -126,68 +126,88 @@ const handleKeyDown = (e: KeyboardEvent) => {
 
 <template>
   <div
-    :class="styles.field"
+    :class="styles.root"
     :data-disabled="disabled ? 'true' : undefined"
+    :data-dragging="isDragging ? 'true' : undefined"
   >
-    <div v-if="label || showValue" :class="styles.head">
+    <div v-if="label || showValue" :class="styles.header">
       <span v-if="label" :class="styles.label">{{ label }}</span>
-      <span v-if="showValue" :class="styles.valueText">{{ formattedValue }}</span>
+      <span v-if="showValue" :class="styles.readout">{{ formattedValue }}</span>
     </div>
 
-    <div
-      ref="trackRef"
-      :class="styles.trackWrapper"
-      @pointerdown="handlePointerDown"
-      @mouseenter="isHovered = true"
-      @mouseleave="isHovered = false"
-    >
-      <div :class="styles.track">
-        <!-- 填充高亮激活轨道 -->
-        <div
-          :class="styles.fill"
-          :style="{ width: `${percentage}%` }"
-        />
-
-        <!-- 刻度点 -->
-        <template v-for="mark in normalizedMarks" :key="mark.value">
-          <span
-            :class="styles.tick"
-            :style="{ left: `${mark.position}%` }"
+    <div :class="styles.body">
+      <div
+        ref="controlRef"
+        :class="styles.control"
+        @pointerdown="handlePointerDown"
+        @mouseenter="isHovered = true"
+        @mouseleave="isHovered = false"
+      >
+        <div :class="styles.track">
+          <!-- 填充高亮激活轨道 -->
+          <div
+            :class="styles.fill"
+            :style="{ width: `${percentage}%` }"
           />
-        </template>
+
+          <!-- 刻度点 -->
+          <template v-for="mark in normalizedMarks" :key="mark.value">
+            <span
+              :class="styles.tick"
+              :style="{ left: `${mark.position}%` }"
+            />
+          </template>
+        </div>
+
+        <!-- Thumbs Container -->
+        <div :class="styles.thumbs">
+          <div
+            :class="styles.thumbLayer"
+            :style="{ left: `${percentage}%` }"
+          >
+            <button
+              type="button"
+              role="slider"
+              :class="styles.thumb"
+              :aria-valuenow="currentValue"
+              :aria-valuemin="min"
+              :aria-valuemax="max"
+              :aria-label="label"
+              :disabled="disabled"
+              tabindex="0"
+              @keydown="handleKeyDown"
+            />
+
+            <!-- 拖拽/悬浮时平滑弹出的气泡 Bubble -->
+            <AnimatePresence>
+              <motion.div
+                v-if="isDragging || isHovered"
+                :class="styles.bubbleAnchor"
+                :initial="{ opacity: 0, y: 4, scale: 0.85 }"
+                :animate="{ opacity: 1, y: 0, scale: 1 }"
+                :exit="{ opacity: 0, y: 2, scale: 0.85 }"
+                :transition="{ duration: motionTokens.duration.instant }"
+              >
+                <div :class="styles.bubble">
+                  {{ formattedValue }}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
 
-      <!-- 可拖拽滑块 Thumb 与悬浮浮动气泡 -->
-      <div
-        :class="styles.thumbSlot"
-        :style="{ left: `${percentage}%` }"
-      >
-        <button
-          type="button"
-          role="slider"
-          :class="styles.thumb"
-          :aria-valuenow="currentValue"
-          :aria-valuemin="min"
-          :aria-valuemax="max"
-          :aria-label="label"
-          :disabled="disabled"
-          tabindex="0"
-          @keydown="handleKeyDown"
-        />
-
-        <!-- 拖拽/悬浮时平滑弹出的气泡 Bubble -->
-        <AnimatePresence>
-          <motion.div
-            v-if="isDragging || isHovered"
-            :class="styles.bubble"
-            :initial="{ opacity: 0, y: 4, scale: 0.85 }"
-            :animate="{ opacity: 1, y: -10, scale: 1 }"
-            :exit="{ opacity: 0, y: 2, scale: 0.85 }"
-            :transition="{ duration: motionTokens.duration.instant }"
+      <!-- 刻度标签 -->
+      <div v-if="normalizedMarks.some(m => m.label)" :class="styles.marks">
+        <template v-for="mark in normalizedMarks" :key="mark.value">
+          <span
+            v-if="mark.label"
+            :class="styles.markLabel"
+            :style="{ left: `${mark.position}%` }"
           >
-            {{ formattedValue }}
-          </motion.div>
-        </AnimatePresence>
+            {{ mark.label }}
+          </span>
+        </template>
       </div>
     </div>
   </div>

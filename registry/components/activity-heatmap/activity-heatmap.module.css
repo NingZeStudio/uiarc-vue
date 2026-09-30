@@ -84,3 +84,16 @@
   .cell[data-empty], .grid[data-reveal="hidden"] .cell[data-empty] { opacity: 0; transform: none; }
   .month, .ring { transition: opacity 150ms linear; }
 }
+
+/* Vue SFC alias */
+.container { composes: root; }
+.info { composes: summary; }
+.label { font-weight: 500; font-size: var(--text-sm); }
+.gridWrap { composes: scroller; }
+.footer { composes: legend; }
+.legendCells { composes: swatches; }
+.level0 { background: var(--surface-muted); }
+.level1 { background: color-mix(in oklch, var(--accent) 25%, var(--surface-muted)); }
+.level2 { background: color-mix(in oklch, var(--accent) 50%, var(--surface-muted)); }
+.level3 { background: color-mix(in oklch, var(--accent) 75%, var(--surface-muted)); }
+.level4 { background: var(--accent); }

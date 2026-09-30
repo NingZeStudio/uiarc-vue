@@ -60,3 +60,7 @@
   .action:active, .close:active { scale: none; }
   .spinner { animation: none; }
 }
+
+/* Vue SFC alias */
+.stack { composes: viewport; }
+.toast { composes: card; }

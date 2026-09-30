@@ -2,8 +2,8 @@
 import { ref, computed } from "vue";
 import { motion, AnimatePresence, type Variants } from "motion-v";
 import { X } from "lucide-vue-next";
-import { motionTokens } from "@/registry/motion-tokens";
-import { useReducedMotion } from "@/registry/composables/use-reduced-motion";
+import { motionTokens } from "../motion-tokens";
+import { useReducedMotion } from "../use-reduced-motion";
 import styles from "./card.module.css";
 
 export interface CardProps {

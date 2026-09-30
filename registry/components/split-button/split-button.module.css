@@ -53,3 +53,6 @@
   .item { transition: none; }
   .menu, .menu[data-state="closed"] { transform: none; transition: opacity var(--duration-instant) linear; }
 }
+
+/* Vue SFC alias */
+.label { composes: primaryContent; }

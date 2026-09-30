@@ -101,3 +101,6 @@
   .close { transition: none; }
   .close:active { transform: none; }
 }
+
+/* Vue SFC alias */
+.content { composes: copy; }

@@ -2,8 +2,8 @@
 import { ref, computed } from "vue";
 import { motion, AnimatePresence } from "motion-v";
 import { Copy, CircleAlert } from "lucide-vue-next";
-import { motionTokens } from "@/registry/motion-tokens";
-import { useReducedMotion } from "@/registry/composables/use-reduced-motion";
+import { motionTokens } from "../motion-tokens";
+import { useReducedMotion } from "../use-reduced-motion";
 import styles from "./copy-button.module.css";
 
 export interface CopyButtonProps {
@@ -68,12 +68,13 @@ const buttonText = computed(() => {
     :aria-label="iconOnly ? buttonText : undefined"
     @click="handleCopy"
   >
-    <span :class="styles.iconWrap">
+    <span :class="styles.icon">
       <AnimatePresence mode="popLayout" :initial="false">
         <motion.span
           v-if="status === 'copied'"
           key="copied"
-          :class="styles.icon"
+          :class="styles.iconInner"
+          data-state="copied"
           :initial="
             prefersReduced
               ? { opacity: 0 }
@@ -117,7 +118,8 @@ const buttonText = computed(() => {
         <motion.span
           v-else-if="status === 'failed'"
           key="failed"
-          :class="styles.icon"
+          :class="styles.iconInner"
+          data-state="error"
           :initial="{ opacity: 0, scale: 0.6 }"
           :animate="{ opacity: 1, scale: 1 }"
           :exit="{ opacity: 0, scale: 0.6 }"
@@ -128,7 +130,7 @@ const buttonText = computed(() => {
         <motion.span
           v-else
           key="idle"
-          :class="styles.icon"
+          :class="styles.iconInner"
           :initial="
             prefersReduced
               ? { opacity: 0 }
@@ -153,7 +155,7 @@ const buttonText = computed(() => {
       <AnimatePresence mode="popLayout" :initial="false">
         <motion.span
           :key="buttonText"
-          :class="styles.text"
+          :class="styles.glyph"
           :initial="
             prefersReduced
               ? { opacity: 0 }
