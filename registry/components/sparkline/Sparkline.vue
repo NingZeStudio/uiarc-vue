@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { motion } from "motion-v";
-import { motionTokens } from "@/registry/motion-tokens";
-import { useReducedMotion } from "@/registry/composables/use-reduced-motion";
+import { motionTokens } from "../motion-tokens";
+import { useReducedMotion } from "../use-reduced-motion";
 import styles from "./sparkline.module.css";
 
 export type SparklineTone = "accent" | "success" | "warning" | "danger";
 
 export interface SparklineProps {
   data: number[];
-  label: string;
+  label?: string;
   value?: string;
   change?: string;
   tone?: SparklineTone;
@@ -17,12 +17,14 @@ export interface SparklineProps {
   height?: number;
   area?: boolean;
   interactive?: boolean;
+  class?: any;
 }
 
 const props = withDefaults(defineProps<SparklineProps>(), {
+  label: "",
   tone: "accent",
-  width: 160,
-  height: 64,
+  width: 280,
+  height: 60,
   area: true,
   interactive: true,
 });
@@ -79,7 +81,7 @@ const curvePoints = computed<Point[]>(() => {
 });
 
 // 将单位化点映射到 SVG viewBox 坐标
-const padding = 4;
+const padding = 6;
 const svgPath = computed(() => {
   const pts = curvePoints.value;
   if (pts.length === 0) return "";
@@ -138,9 +140,9 @@ const cursorCoords = computed(() => {
 </script>
 
 <template>
-  <figure :class="styles.figure">
-    <figcaption :class="styles.caption">
-      <span :class="styles.label">{{ label }}</span>
+  <figure :class="[styles.figure, props.class]">
+    <figcaption v-if="label || value || change" :class="styles.caption">
+      <span v-if="label" :class="styles.label">{{ label }}</span>
       <strong v-if="displayValue">{{ displayValue }}</strong>
       <small v-if="change" :class="styles[tone]">{{ change }}</small>
     </figcaption>
@@ -155,6 +157,7 @@ const cursorCoords = computed(() => {
         ref="svgRef"
         :class="[styles.chart, styles[tone]]"
         :viewBox="`0 0 ${width} ${height}`"
+        preserveAspectRatio="none"
         aria-hidden="true"
       >
         <!-- 面积填充 -->
