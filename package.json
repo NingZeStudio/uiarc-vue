@@ -1,6 +1,6 @@
 {
   "name": "uiarc-vue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Arc UI ported to Vue 3 with calm motion and physical aesthetics, compatible with shadcn-vue",
   "type": "module",
   "scripts": {
