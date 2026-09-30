@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, inject, type Ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import { useReducedMotion } from "@/registry/composables/use-reduced-motion";
+import { useReducedMotion } from "../use-reduced-motion";
 import styles from "./tabs.module.css";
 
 const props = defineProps<{
@@ -56,7 +56,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="shellRef"
-    :class="styles.listShell"
+    :class="[styles.listShell, props.class]"
     :data-overflow="edges.overflow ? '' : undefined"
     :data-left="edges.left ? '' : undefined"
     :data-right="edges.right ? '' : undefined"
@@ -72,8 +72,8 @@ onUnmounted(() => {
       <ChevronLeft :size="16" aria-hidden="true" />
     </button>
 
-    <div ref="viewportRef" :class="styles.viewport">
-      <div ref="listRef" role="tablist" :class="[styles.list, props.class]">
+    <div ref="viewportRef" :class="styles.viewport" class="w-full">
+      <div ref="listRef" role="tablist" :class="styles.list" class="w-full">
         <slot />
       </div>
     </div>
