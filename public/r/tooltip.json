@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "tooltip",
+  "type": "registry:ui",
+  "title": "Tooltip",
+  "description": "平静物理微动效组件：Tooltip",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/tooltip/Tooltip.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/tooltip/Tooltip.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./tooltip.module.css\";\n\nexport type TooltipSide = \"top\" | \"bottom\" | \"left\" | \"right\";\n\nexport interface TooltipProps {\n  content?: string;\n  side?: TooltipSide;\n  delay?: number;\n}\n\nconst props = withDefaults(defineProps<TooltipProps>(), {\n  side: \"top\",\n  delay: 200,\n});\n\nconst prefersReduced = useReducedMotion();\nconst isOpen = ref(false);\nlet timer: any = null;\n\nconst show = () => {\n  clearTimeout(timer);\n  timer = setTimeout(() => {\n    isOpen.value = true;\n  }, props.delay);\n};\n\nconst hide = () => {\n  clearTimeout(timer);\n  isOpen.value = false;\n};\n\nconst getInitialPos = () => {\n  if (props.side === \"top\") return { y: 4 };\n  if (props.side === \"bottom\") return { y: -4 };\n  if (props.side === \"left\") return { x: 4 };\n  return { x: -4 };\n};\n</script>\n\n<template>\n  <div\n    :class=\"styles.wrapper\"\n    @mouseenter=\"show\"\n    @mouseleave=\"hide\"\n    @focus=\"show\"\n    @blur=\"hide\"\n  >\n    <slot />\n\n    <AnimatePresence>\n      <motion.div\n        v-if=\"isOpen && (content || $slots.content)\"\n        :class=\"styles.tooltip\"\n        :data-side=\"side\"\n        role=\"tooltip\"\n        :initial=\"\n          prefersReduced\n            ? { opacity: 0 }\n            : {\n                opacity: 0,\n                ...getInitialPos(),\n                filter: `blur(${motionTokens.blur.subtle}px)`,\n              }\n        \"\n        :animate=\"{\n          opacity: 1,\n          x: 0,\n          y: 0,\n          filter: 'blur(0px)',\n        }\"\n        :exit=\"\n          prefersReduced\n            ? { opacity: 0 }\n            : {\n                opacity: 0,\n                filter: `blur(${motionTokens.blur.subtle}px)`,\n              }\n        \"\n        :transition=\"{\n          duration: motionTokens.duration.fast,\n          ease: [...motionTokens.ease.standard],\n        }\"\n      >\n        <slot name=\"content\">{{ content }}</slot>\n      </motion.div>\n    </AnimatePresence>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/tooltip/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/tooltip/index.ts",
+      "content": "export { default as Tooltip } from \"./Tooltip.vue\";\nexport type { TooltipProps, TooltipSide } from \"./Tooltip.vue\";\n"
+    },
+    {
+      "path": "registry/components/tooltip/tooltip.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/tooltip/tooltip.module.css",
+      "content": ".wrapper {\n  position: relative;\n  display: inline-flex;\n}\n\n.tooltip {\n  position: absolute;\n  z-index: 50;\n  max-width: 16rem;\n  padding: var(--space-2) var(--space-3);\n  border: 1px solid color-mix(in oklch, var(--background) 14%, var(--foreground));\n  border-radius: calc(var(--radius-control) * 0.7);\n  background: var(--foreground);\n  color: var(--background);\n  box-shadow: var(--shadow-raised);\n  font-family: var(--font-body, sans-serif);\n  font-size: var(--text-xs);\n  font-weight: 400;\n  line-height: var(--leading-body);\n  white-space: nowrap;\n  pointer-events: none;\n  user-select: none;\n}\n\n.tooltip[data-side=\"top\"] {\n  bottom: calc(100% + 6px);\n  left: 50%;\n  transform: translateX(-50%);\n}\n\n.tooltip[data-side=\"bottom\"] {\n  top: calc(100% + 6px);\n  left: 50%;\n  transform: translateX(-50%);\n}\n\n.tooltip[data-side=\"left\"] {\n  right: calc(100% + 6px);\n  top: 50%;\n  transform: translateY(-50%);\n}\n\n.tooltip[data-side=\"right\"] {\n  left: calc(100% + 6px);\n  top: 50%;\n  transform: translateY(-50%);\n}\n"
+    }
+  ]
+}

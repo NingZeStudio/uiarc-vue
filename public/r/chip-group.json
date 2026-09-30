@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "chip-group",
+  "type": "registry:ui",
+  "title": "Chip Group",
+  "description": "平静物理微动效组件：Chip Group",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/chip-group/ChipGroup.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/chip-group/ChipGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./chip-group.module.css\";\n\n\n\ninterface ChipGroupProps {\n  options: ChipOption[];\n  value: string[];\n  onValueChange: (value: string[]) => void;\n  /** Accessible name of the group, such as “Topics”. */\n  label: string;\n  /** Allow several chips at once. In single mode the selected chip can still be cleared. */\n  multiple?: boolean;\n  /** Chips shown before the rest fold behind a “+N more” chip. Chips selected when it folds stay in view. */\n  maxVisible?: number;\n  className?: string;\n}\n\nconst props = withDefaults(defineProps<ChipGroupProps>(), {});\nconst emit = defineEmits<{\n  (e: \"change\", val: any): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n</script>\n\n<template>\n  <div :class=\"[styles?.root || styles?.container || styles?.chip_group || '']\">\n    <slot />\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/chip-group/chip-group.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/chip-group/chip-group.module.css",
+      "content": "/* The frame follows the chip rows' height on a spring; the rows re-flow once and every chip glides to its new place. */\n.frame { min-width: 0; }\n.content { position: relative; }\n.group { position: relative; isolation: isolate; display: flex; flex-wrap: wrap; gap: var(--space-2); }\n\n/* The button is only the hit area and the layout box. What you see is the surface, which trails the box on a spring while the width morphs. */\n.chip { position: relative; display: inline-flex; max-width: 100%; padding: 0; border: 0; border-radius: var(--radius-pill); background: none; color: var(--text-secondary); font: inherit; font-size: var(--text-sm); font-weight: 500; letter-spacing: var(--tracking-body); line-height: 20px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-standard); }\n/* Press answers on the body with the individual scale property, so it never fights the layout transform on the button. */\n.body { position: relative; isolation: isolate; display: inline-flex; min-width: 0; height: var(--control-height-sm); align-items: center; padding: 0 14px; transition: scale var(--duration-spring) var(--ease-spring); }\n.chip:active .body { scale: .97; transition-duration: var(--duration-instant); transition-timing-function: var(--ease-standard); }\n.surface { position: absolute; z-index: -1; top: 0; bottom: 0; left: 0; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); transition: background-color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard); }\n/* The check grows from its left edge where the label started; the slot hands its width to the label in one layout step, and the label's offset springs it over. */\n.check { position: absolute; top: calc(50% - 7px); left: 12px; display: grid; width: 14px; height: 14px; place-items: center; color: var(--accent-strong); transform-origin: 0 50%; }\n.check svg { display: block; overflow: visible; }\n.slot { width: 0; flex: none; }\n.body[data-selected=\"true\"] .slot { width: 18px; }\n.label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n\n/* Selected reads as a quiet tint of the accent (neutral by default) plus the check, never color alone. */\n.body[data-selected=\"true\"] .surface { border-color: color-mix(in oklch, var(--accent) 42%, var(--border)); background: color-mix(in oklch, var(--accent) 11%, var(--surface)); }\n.chip[aria-pressed=\"true\"] { color: var(--foreground); }\n@media (hover: hover) and (pointer: fine) {\n  .chip:hover { color: var(--foreground); }\n  .chip:hover .surface { border-color: var(--border-strong); }\n  .chip[aria-pressed=\"true\"]:hover .surface { border-color: color-mix(in oklch, var(--accent) 60%, var(--border)); background: color-mix(in oklch, var(--accent) 16%, var(--surface)); }\n}\n\n/* The overflow chip travels under the chips it reveals, so they seem to come out of it. */\n.chip:not(.more) { z-index: 1; }\n.more { color: var(--text-muted); }\n.more .surface { border-color: var(--border); background: var(--surface-muted); }\n.moreText { position: relative; display: inline-flex; justify-content: center; font-variant-numeric: tabular-nums; }\n.moreLine { display: block; white-space: nowrap; }\n\n@media (prefers-reduced-motion: reduce) {\n  .chip, .body, .surface { transition: none; }\n  .chip:active .body { scale: none; }\n}\n"
+    },
+    {
+      "path": "registry/components/chip-group/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/chip-group/index.ts",
+      "content": "export { default as ChipGroup } from \"./ChipGroup.vue\";\nexport * from \"./ChipGroup.vue\";\n"
+    }
+  ]
+}

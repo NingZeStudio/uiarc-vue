@@ -1,0 +1,67 @@
+.counter {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  color: var(--foreground);
+  font-family: var(--font-display, sans-serif);
+  font-size: var(--text-3xl);
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.label {
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-family: var(--font-body, sans-serif);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: var(--leading-body);
+}
+
+.value {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.column {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 1.15em;
+  overflow: hidden;
+}
+
+.symbol {
+  display: inline-block;
+  opacity: 0.8;
+}
+
+.sizer {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+.glyph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.affix {
+  color: var(--text-secondary);
+  font-size: 0.7em;
+  margin: 0 4px;
+}

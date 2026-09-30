@@ -1,0 +1,102 @@
+.figure {
+  display: grid;
+  min-width: 0;
+  gap: 12px;
+  margin: 0;
+  color: var(--foreground);
+  user-select: none;
+}
+
+.caption {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.caption strong {
+  margin-left: auto;
+  color: var(--foreground);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.caption small {
+  flex: none;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  transition: color var(--duration-standard) var(--ease-standard);
+}
+
+.accent {
+  color: var(--accent-strong);
+  stroke: var(--accent);
+}
+
+.success {
+  color: var(--success);
+  stroke: var(--success);
+}
+
+.warning {
+  color: var(--warning);
+  stroke: var(--warning);
+}
+
+.danger {
+  color: var(--danger);
+  stroke: var(--danger);
+}
+
+.plot {
+  position: relative;
+  width: 100%;
+  cursor: default;
+}
+
+.plot[data-interactive="true"] {
+  cursor: ew-resize;
+  touch-action: pan-y;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.area {
+  fill: currentColor;
+  opacity: 0.08;
+}
+
+.line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cursorLine {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+.cursorPoint {
+  fill: var(--surface);
+  stroke: currentColor;
+  stroke-width: 2;
+}

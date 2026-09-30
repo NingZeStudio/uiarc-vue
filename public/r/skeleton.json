@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:ui",
+  "title": "Skeleton",
+  "description": "平静物理微动效组件：Skeleton",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/skeleton/Skeleton.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/skeleton/Skeleton.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, type CSSProperties } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./skeleton.module.css\";\n\nexport interface SkeletonProps {\n  label?: string;\n  lines?: number;\n  avatar?: boolean;\n  loading?: boolean;\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<SkeletonProps>(), {\n  label: \"Loading content\",\n  lines: 3,\n  avatar: false,\n  loading: true,\n});\n\nconst prefersReduced = useReducedMotion();\nconst count = computed(() => Math.min(Math.max(Math.floor(props.lines), 1), 6));\n</script>\n\n<template>\n  <div v-if=\"!$slots.default\" :class=\"[styles.root, props.class]\" role=\"status\" :aria-label=\"label\" aria-busy=\"true\">\n    <span v-if=\"avatar\" :class=\"styles.avatar\" aria-hidden=\"true\" />\n    <span :class=\"styles.lines\" aria-hidden=\"true\">\n      <span\n        v-for=\"(_, index) in count\"\n        :key=\"index\"\n        :class=\"styles.line\"\n        :style=\"{ '--index': index + (avatar ? 1 : 0) } as CSSProperties\"\n      />\n    </span>\n  </div>\n\n  <div v-else :class=\"props.class\" :aria-busy=\"loading\">\n    <AnimatePresence mode=\"popLayout\" :initial=\"false\">\n      <motion.div\n        v-if=\"loading\"\n        key=\"placeholder\"\n        :exit=\"{\n          opacity: 0,\n          transition: {\n            duration: prefersReduced\n              ? motionTokens.duration.instant\n              : motionTokens.duration.fast,\n          },\n        }\"\n      >\n        <div :class=\"styles.root\" role=\"status\" :aria-label=\"label\" aria-busy=\"true\">\n          <span v-if=\"avatar\" :class=\"styles.avatar\" aria-hidden=\"true\" />\n          <span :class=\"styles.lines\" aria-hidden=\"true\">\n            <span\n              v-for=\"(_, index) in count\"\n              :key=\"index\"\n              :class=\"styles.line\"\n              :style=\"{ '--index': index + (avatar ? 1 : 0) } as CSSProperties\"\n            />\n          </span>\n        </div>\n      </motion.div>\n\n      <motion.div\n        v-else\n        key=\"content\"\n        :initial=\"prefersReduced ? { opacity: 0 } : { opacity: 0, y: 4 }\"\n        :animate=\"{ opacity: 1, y: 0 }\"\n        :transition=\"{\n          duration: prefersReduced\n            ? motionTokens.duration.instant\n            : motionTokens.duration.standard,\n          ease: [...motionTokens.ease.enter],\n        }\"\n      >\n        <slot />\n      </motion.div>\n    </AnimatePresence>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/skeleton/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/skeleton/index.ts",
+      "content": "export { default as Skeleton } from \"./Skeleton.vue\";\nexport * from \"./Skeleton.vue\";\n"
+    },
+    {
+      "path": "registry/components/skeleton/skeleton.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/skeleton/skeleton.module.css",
+      "content": ".root { display: flex; width: 100%; min-width: 0; align-items: flex-start; gap: var(--space-4); }\n/* A calm, finite pulse: each block dims a beat after the one above it, then rests after about 20 seconds. */\n.avatar, .line { display: block; flex: 0 0 auto; border-radius: var(--radius-control); background: color-mix(in oklch, var(--border-strong) 38%, var(--surface)); animation: skeleton-pulse 1.8s var(--ease-in-out) calc(var(--index, 0) * 90ms) 11 both; }\n.avatar { width: var(--control-height-md); height: var(--control-height-md); border-radius: var(--radius-pill); }\n.lines { display: grid; flex: 1; gap: var(--space-3); padding-top: var(--space-1); }\n.line { width: 100%; height: var(--space-3); }\n.line:first-child { width: 48%; height: var(--space-4); }\n.line:last-child { width: 72%; }\n.frame { position: relative; display: flow-root; }\n@keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .52; } }\n@media (prefers-reduced-motion: reduce) { .avatar, .line { animation: none; } }\n"
+    }
+  ]
+}

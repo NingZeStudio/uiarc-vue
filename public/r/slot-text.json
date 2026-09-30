@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "slot-text",
+  "type": "registry:ui",
+  "title": "Slot Text",
+  "description": "平静物理微动效组件：Slot Text",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/slot-text/SlotText.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/slot-text/SlotText.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./slot-text.module.css\";\n\n\n\ninterface SlotTextProps {\n  /** The value to show. Numbers pass through format; strings render as they are. */\n  value: string | number;\n  /** Formats a number value. Defaults to en-US grouping, so 12480 reads 12,480. */\n  format?: (value: number) => string;\n  /** Seconds the first reel spins. Later reels add stagger. */\n  duration?: number;\n  /** Seconds between reels stopping, left to right. */\n  stagger?: number;\n  /** Extra full turns a digit makes before it lands. 0 rolls straight to the new digit. */\n  spins?: number;\n  /** Which end reels are matched from when the length changes. Numbers default to end, so 999 to 1,000 grows on the left. */\n  align?: \"start\" | \"end\";\n  /** Announce new values politely to screen readers. */\n  announce?: boolean;\n  className?: string;\n  style?: CSSProperties;\n}\n\nconst props = withDefaults(defineProps<SlotTextProps>(), {});\nconst emit = defineEmits<{\n  (e: \"change\", val: any): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n</script>\n\n<template>\n  <div :class=\"[styles?.root || styles?.container || styles?.slot_text || '']\">\n    <slot />\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/slot-text/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/slot-text/index.ts",
+      "content": "export { default as SlotText } from \"./SlotText.vue\";\nexport * from \"./SlotText.vue\";\n"
+    },
+    {
+      "path": "registry/components/slot-text/slot-text.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/slot-text/slot-text.module.css",
+      "content": ".root { position: relative; display: inline-block; font-variant-numeric: tabular-nums; line-height: 1.15; white-space: nowrap; vertical-align: bottom; }\n.reels { display: inline-flex; height: 1.15em; align-items: flex-start; }\n\n/* Each slot holds one character. Its width follows the character on a spring, so the word never resizes in one frame. */\n.slot { position: relative; display: inline-block; height: 1.15em; flex: none; overflow: visible; }\n.sizer { display: inline-block; visibility: hidden; white-space: pre; pointer-events: none; }\n\n/* The window reaches a little past the line so glyphs fade at the edges instead of being cut. */\n.window {\n  position: absolute;\n  inset: -.22em -.08em;\n  overflow: hidden;\n  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 .24em, #000 calc(100% - .24em), transparent);\n  mask-image: linear-gradient(to bottom, transparent, #000 .24em, #000 calc(100% - .24em), transparent);\n}\n.strip { position: absolute; top: calc(.22em - .225em); right: .08em; left: .08em; display: flex; flex-direction: column; align-items: center; will-change: transform; }\n.cell { display: block; height: 1.6em; padding-top: .225em; box-sizing: border-box; line-height: 1.15; white-space: pre; }\n\n.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }\n"
+    }
+  ]
+}

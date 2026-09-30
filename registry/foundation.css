@@ -1,0 +1,217 @@
+:root {
+  color-scheme: light;
+  --neutral-0: oklch(100% 0 0);
+  --neutral-1: oklch(99% 0 0);
+  --neutral-2: oklch(97.8% 0 0);
+  --neutral-3: oklch(95.8% 0 0);
+  --neutral-4: oklch(91.5% 0 0);
+  --neutral-5: oklch(84% 0 0);
+  --neutral-6: oklch(72% 0 0);
+  --neutral-7: oklch(59% 0 0);
+  --neutral-8: oklch(46% 0 0);
+  --neutral-9: oklch(34% 0 0);
+  --neutral-10: oklch(23% 0 0);
+  --neutral-11: oklch(15% 0 0);
+
+  --background: var(--neutral-0);
+  --surface: var(--neutral-0);
+  --surface-raised: var(--neutral-0);
+  --surface-muted: var(--neutral-2);
+  --foreground: var(--neutral-11);
+  --text-secondary: var(--neutral-8);
+  --text-muted: var(--neutral-7);
+
+  --border: oklch(93.5% 0 0);
+  --border-subtle: oklch(96.5% 0 0);
+  --border-strong: oklch(82% 0 0);
+
+  --accent: oklch(33% 0 0);
+  --accent-strong: oklch(24% 0 0);
+  --accent-subtle: oklch(33% 0 0 / .1);
+  --accent-foreground: var(--background);
+
+  /* Selection controls (switch, checkbox, radio, slider) */
+  --control-on: oklch(23% 0 0);
+  --control-glyph: oklch(100% 0 0);
+  --control-track: oklch(89.5% 0 0);
+  --control-track-hover: oklch(86% 0 0);
+  --control-thumb: oklch(100% 0 0);
+  --control-thumb-on: oklch(100% 0 0);
+  --control-thumb-shadow: 0 0 0 .5px oklch(0% 0 0 / .07), 0 1px 2px oklch(0% 0 0 / .14), 0 2px 6px oklch(0% 0 0 / .06);
+  --control-on-subtle: color-mix(in oklch, var(--control-on) 10%, transparent);
+  --control-fill: var(--control-on);
+
+  /* Product decision: no focus rings anywhere. Kept as a token so existing rules resolve to nothing */
+  --focus-ring: transparent;
+
+  --success: oklch(49% .19 150);
+  --warning: oklch(58% .18 75);
+  --danger: oklch(54% .21 25);
+
+  --shadow-resting: 0 1px 2px oklch(0% 0 0 / .035);
+  --shadow-raised: 0 6px 18px oklch(0% 0 0 / .065), 0 1px 3px oklch(0% 0 0 / .035);
+  --shadow-floating: 0 20px 48px oklch(0% 0 0 / .105), 0 3px 10px oklch(0% 0 0 / .045);
+
+  /* Brand gradient: soft lavender to warm peach (low saturation) */
+  --arc-gradient-from: oklch(90% .045 300);
+  --arc-gradient-to: oklch(92% .045 65);
+  --arc-gradient: linear-gradient(100deg, var(--arc-gradient-from), var(--arc-gradient-to));
+  --arc-gradient-foreground: oklch(22% .01 300);
+  --arc-gradient-soft: linear-gradient(135deg, oklch(97.5% .016 300), oklch(98% .016 65));
+  --arc-gradient-line: linear-gradient(100deg, oklch(83% .06 300), oklch(86% .06 65));
+  --arc-gradient-ink: linear-gradient(100deg, oklch(47% .1 300), oklch(50% .09 55));
+
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  --radius-control: 1.125rem;
+  --radius-panel: 1.625rem;
+  --radius-surface: 2.125rem;
+  --radius-pill: 9999px;
+
+  --control-height-sm: 2.25rem;
+  --control-height-md: 2.75rem;
+  --control-height-lg: 3.125rem;
+
+  --font-display: var(--font-geist, "Geist Variable"), sans-serif;
+  --font-body: var(--font-inter, "Inter Variable"), sans-serif;
+
+  --text-xs: .75rem;
+  --text-sm: .875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3.25rem;
+  --text-5xl: 4.5rem;
+  --tracking-display: -.03em;
+  --leading-body: 1.5;
+  --leading-tight: 1.2;
+
+  /* Durations and standard easings for CSS Transitions */
+  --duration-instant: 0.12s;
+  --duration-fast: 0.16s;
+  --duration-standard: 0.24s;
+  --duration-slow: 0.48s;
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+}
+
+/* Dark Theme */
+:root[data-theme="dark"], html.dark {
+  color-scheme: dark;
+  --neutral-0: oklch(14% 0 0);
+  --neutral-1: oklch(18% 0 0);
+  --neutral-2: oklch(22% 0 0);
+  --neutral-3: oklch(27% 0 0);
+  --neutral-4: oklch(34% 0 0);
+  --neutral-5: oklch(46% 0 0);
+  --neutral-6: oklch(59% 0 0);
+  --neutral-7: oklch(72% 0 0);
+  --neutral-8: oklch(84% 0 0);
+  --neutral-9: oklch(91.5% 0 0);
+  --neutral-10: oklch(95.8% 0 0);
+  --neutral-11: oklch(99% 0 0);
+
+  --background: var(--neutral-0);
+  --surface: var(--neutral-1);
+  --surface-raised: var(--neutral-2);
+  --surface-muted: var(--neutral-3);
+  --foreground: var(--neutral-11);
+  --text-secondary: var(--neutral-8);
+  --text-muted: var(--neutral-6);
+
+  --border: oklch(26% 0 0);
+  --border-subtle: oklch(21% 0 0);
+  --border-strong: oklch(36% 0 0);
+
+  --accent: oklch(88% 0 0);
+  --accent-strong: oklch(96% 0 0);
+  --accent-subtle: oklch(88% 0 0 / .12);
+  --accent-foreground: var(--neutral-0);
+
+  --control-on: oklch(88% 0 0);
+  --control-glyph: oklch(14% 0 0);
+  --control-track: oklch(28% 0 0);
+  --control-track-hover: oklch(34% 0 0);
+  --control-thumb: oklch(14% 0 0);
+  --control-thumb-on: oklch(14% 0 0);
+  --control-thumb-shadow: 0 0 0 .5px oklch(100% 0 0 / .08), 0 1px 3px oklch(0% 0 0 / .4);
+  --control-fill: var(--control-on);
+
+  --shadow-resting: 0 1px 2px oklch(0% 0 0 / .4);
+  --shadow-raised: 0 8px 24px oklch(0% 0 0 / .5), 0 2px 6px oklch(0% 0 0 / .3);
+  --shadow-floating: 0 24px 64px oklch(0% 0 0 / .65), 0 4px 16px oklch(0% 0 0 / .4);
+
+  --arc-gradient-from: oklch(32% .05 300);
+  --arc-gradient-to: oklch(34% .05 65);
+  --arc-gradient-foreground: oklch(94% .01 300);
+  --arc-gradient-soft: linear-gradient(135deg, oklch(19% .016 300), oklch(20% .016 65));
+  --arc-gradient-line: linear-gradient(100deg, oklch(36% .04 300), oklch(38% .04 65));
+  --arc-gradient-ink: linear-gradient(100deg, oklch(84% .08 300), oklch(86% .07 55));
+}
+
+/* Accent Themes */
+:root[data-accent="blue"] {
+  --accent: oklch(52% .18 250);
+  --accent-strong: oklch(44% .19 250);
+  --accent-subtle: oklch(52% .18 250 / .12);
+  --control-on: var(--accent);
+}
+:root[data-theme="dark"][data-accent="blue"], html.dark[data-accent="blue"] {
+  --accent: oklch(70% .16 250);
+  --accent-strong: oklch(78% .14 250);
+  --accent-subtle: oklch(70% .16 250 / .15);
+  --control-on: var(--accent);
+}
+
+:root[data-accent="violet"] {
+  --accent: oklch(52% .16 295);
+  --accent-strong: oklch(44% .18 295);
+  --accent-subtle: oklch(52% .16 295 / .12);
+  --control-on: var(--accent);
+}
+:root[data-theme="dark"][data-accent="violet"], html.dark[data-accent="violet"] {
+  --accent: oklch(72% .14 295);
+  --accent-strong: oklch(80% .12 295);
+  --accent-subtle: oklch(72% .14 295 / .15);
+  --control-on: var(--accent);
+}
+
+:root[data-accent="green"] {
+  --accent: oklch(52% .15 145);
+  --accent-strong: oklch(44% .16 145);
+  --accent-subtle: oklch(52% .15 145 / .12);
+  --control-on: var(--accent);
+}
+:root[data-theme="dark"][data-accent="green"], html.dark[data-accent="green"] {
+  --accent: oklch(74% .14 145);
+  --accent-strong: oklch(82% .12 145);
+  --accent-subtle: oklch(74% .14 145 / .15);
+  --control-on: var(--accent);
+}
+
+:root[data-accent="amber"] {
+  --accent: oklch(58% .16 75);
+  --accent-strong: oklch(50% .17 75);
+  --accent-subtle: oklch(58% .16 75 / .12);
+  --control-on: var(--accent);
+}
+:root[data-theme="dark"][data-accent="amber"], html.dark[data-accent="amber"] {
+  --accent: oklch(76% .15 75);
+  --accent-strong: oklch(84% .13 75);
+  --accent-subtle: oklch(76% .15 75 / .15);
+  --control-on: var(--accent);
+}

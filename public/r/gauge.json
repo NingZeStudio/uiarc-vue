@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "gauge",
+  "type": "registry:ui",
+  "title": "Gauge",
+  "description": "平静物理微动效组件：Gauge",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/gauge/Gauge.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/gauge/Gauge.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./gauge.module.css\";\n\nexport type GaugeTone = \"accent\" | \"success\" | \"warning\" | \"danger\";\n\nexport interface GaugeThreshold {\n  from: number;\n  tone: GaugeTone;\n  label: string;\n}\n\nexport interface GaugeProps {\n  value: number;\n  min?: number;\n  max?: number;\n  label: string;\n  detail?: string;\n  tone?: GaugeTone;\n  thresholds?: GaugeThreshold[];\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<GaugeProps>(), {\n  min: 0,\n  max: 100,\n  tone: \"accent\",\n});\n\nconst prefersReduced = useReducedMotion();\nconst safeMax = computed(() => (props.max > props.min ? props.max : props.min + 1));\nconst percentage = computed(() =>\n  Math.min(1, Math.max(0, (props.value - props.min) / (safeMax.value - props.min)))\n);\nconst displayValue = computed(() => Math.round(percentage.value * 100));\n\nconst radius = 42;\nconst startAngle = -135;\nconst spanAngle = 270;\n\nfunction arcFor(sweep: number) {\n  const end = startAngle + spanAngle * Math.min(1, Math.max(0, sweep));\n  const at = (angle: number) =>\n    `${(50 + radius * Math.sin((angle * Math.PI) / 180)).toFixed(3)} ${(\n      50 -\n      radius * Math.cos((angle * Math.PI) / 180)\n    ).toFixed(3)}`;\n  return `M ${at(startAngle)} A ${radius} ${radius} 0 ${\n    end - startAngle > 180 ? 1 : 0\n  } 1 ${at(end)}`;\n}\n\nconst trackD = arcFor(1);\nconst fillD = computed(() => arcFor(percentage.value));\n\nconst activeTone = computed(() => {\n  if (!props.thresholds || props.thresholds.length === 0) return props.tone;\n  const sorted = [...props.thresholds].sort((a, b) => a.from - b.from);\n  const match = sorted.filter((t) => props.value >= t.from).pop();\n  return match?.tone || props.tone;\n});\n</script>\n\n<template>\n  <div :class=\"[styles.gauge, styles[activeTone], props.class]\">\n    <div :class=\"styles.visual\">\n      <svg\n        viewBox=\"0 0 100 100\"\n        :class=\"styles.svg\"\n        fill=\"none\"\n        stroke-linecap=\"round\"\n      >\n        <!-- Background Track -->\n        <path :d=\"trackD\" :class=\"styles.track\" stroke-width=\"8\" />\n\n        <!-- Dynamic Value Arc -->\n        <motion.path\n          :d=\"fillD\"\n          :class=\"styles.fill\"\n          stroke-width=\"8\"\n          :initial=\"prefersReduced ? false : { pathLength: 0 }\"\n          :animate=\"{ pathLength: 1 }\"\n          :transition=\"\n            prefersReduced ? { duration: 0 } : motionTokens.spring.smooth\n          \"\n        />\n      </svg>\n\n      <div :class=\"styles.centerText\">\n        <span :class=\"styles.number\">{{ displayValue }}</span>\n        <span :class=\"styles.unit\">%</span>\n      </div>\n    </div>\n\n    <div :class=\"styles.meta\">\n      <h4 :class=\"styles.label\">{{ label }}</h4>\n      <p v-if=\"detail\" :class=\"styles.detail\">{{ detail }}</p>\n    </div>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/gauge/gauge.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/gauge/gauge.module.css",
+      "content": ".figure { display: grid; justify-items: center; min-width: 0; gap: 10px; margin: 0; text-align: center; }.figure figcaption { display: grid; gap: 3px; min-width: 0; }.figure strong { font-size: var(--text-sm); font-weight: 500; }.detail { color: var(--text-muted); font-size: var(--text-xs); font-variant-numeric: tabular-nums; }\n.accent { --gauge-color: var(--accent); --gauge-text: var(--accent-strong); }.success { --gauge-color: var(--success); --gauge-text: var(--success); }.warning { --gauge-color: var(--warning); --gauge-text: var(--warning); }.danger { --gauge-color: var(--danger); --gauge-text: var(--danger); }\n\n/* An activity style ring: a thick stroke with round caps over a faint tint of its own color. The stroke scales with the ring. */\n.visual { position: relative; width: min(100%, 176px); aspect-ratio: 100 / 90; }\n.visual svg { display: block; width: 100%; height: 100%; overflow: visible; }\n.track, .arc { fill: none; stroke-width: 9; stroke-linecap: round; transition: stroke var(--duration-standard) var(--ease-standard); }\n.track { stroke: color-mix(in oklch, var(--gauge-color) 13%, transparent); }\n.arc { stroke: var(--gauge-color); }\n\n/* The readout sits on the ring's true centre, which is the middle of a square as wide as the ring. */\n.readout { position: absolute; top: 0; left: 0; display: grid; width: 100%; aspect-ratio: 1; place-content: center; justify-items: center; gap: 4px; pointer-events: none; }\n.number { position: relative; display: inline-flex; align-items: baseline; color: var(--foreground); font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 500; letter-spacing: var(--tracking-display); line-height: 1; font-variant-numeric: tabular-nums; }\n.digits { display: inline-flex; justify-content: flex-end; white-space: nowrap; }\n.unit { margin-left: 1px; color: var(--text-secondary); font-family: var(--font-body); font-size: .5em; letter-spacing: 0; }\n.sizer { position: absolute; top: 0; left: 0; visibility: hidden; white-space: nowrap; pointer-events: none; }\n.status { min-width: 100px; min-height: 1.4em; color: var(--gauge-text); font-size: var(--text-xs); font-weight: 500; line-height: 1.4; transition: color var(--duration-standard) var(--ease-standard); }\n\n/* Label, status and detail copy swap in place: the outgoing line is popped out of flow while the new one rises in. */\n.swap { position: relative; display: block; }\n.swap > .text { display: inline-block; }\n@media (prefers-reduced-motion: reduce) { .track, .arc, .status { transition: none; } }\n"
+    },
+    {
+      "path": "registry/components/gauge/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/gauge/index.ts",
+      "content": "export { default as Gauge } from \"./Gauge.vue\";\nexport * from \"./Gauge.vue\";\n"
+    }
+  ]
+}

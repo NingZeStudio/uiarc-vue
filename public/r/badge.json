@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "badge",
+  "type": "registry:ui",
+  "title": "Badge",
+  "description": "平静物理微动效组件：Badge",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/badge/Badge.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/badge/Badge.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useMorphWidth } from \"@/registry/composables/use-morph-width\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./badge.module.css\";\n\nexport type BadgeTone = \"neutral\" | \"success\" | \"info\" | \"warning\" | \"danger\";\nexport type BadgeSize = \"sm\" | \"md\";\n\nexport interface BadgeProps {\n  tone?: BadgeTone;\n  size?: BadgeSize;\n  morphKey?: string | number;\n}\n\nconst props = withDefaults(defineProps<BadgeProps>(), {\n  tone: \"neutral\",\n  size: \"md\",\n  morphKey: \"default\",\n});\n\nconst badgeRef = ref<HTMLSpanElement | null>(null);\nconst prefersReduced = useReducedMotion();\n\nconst textIn = {\n  opacity: 0,\n  y: \"0.3em\",\n  filter: `blur(${motionTokens.blur.soft}px)`,\n};\n\nconst shown = {\n  opacity: 1,\n  y: \"0em\",\n  filter: \"blur(0px)\",\n};\n\nconst textOut = {\n  opacity: 0,\n  y: \"-0.3em\",\n  filter: `blur(${motionTokens.blur.subtle}px)`,\n  transition: {\n    duration: motionTokens.duration.fast,\n    ease: [...motionTokens.ease.standard],\n  },\n};\n\nconst morphWidth = useMorphWidth(\n  badgeRef,\n  () => `${props.morphKey}-${props.tone}`,\n  { disabled: prefersReduced }\n);\n</script>\n\n<template>\n  <span\n    ref=\"badgeRef\"\n    :class=\"[\n      styles.badge,\n      styles[tone],\n      styles[size],\n    ]\"\n    :style=\"{ width: morphWidth === 'auto' ? 'auto' : morphWidth }\"\n  >\n    <AnimatePresence mode=\"popLayout\" :initial=\"false\">\n      <motion.span\n        :key=\"String(morphKey)\"\n        :class=\"styles.content\"\n        :initial=\"textIn\"\n        :animate=\"shown\"\n        :exit=\"textOut\"\n        :transition=\"motionTokens.spring.snappy\"\n      >\n        <span v-if=\"$slots.icon\" :class=\"styles.iconSlot\">\n          <slot name=\"icon\" />\n        </span>\n        <slot />\n      </motion.span>\n    </AnimatePresence>\n  </span>\n</template>\n"
+    },
+    {
+      "path": "registry/components/badge/badge.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/badge/badge.module.css",
+      "content": ".badge {\n  display: inline-flex;\n  min-height: 26px;\n  align-items: center;\n  justify-content: center;\n  gap: var(--space-1);\n  border: 1px solid var(--border);\n  border-radius: var(--radius-pill);\n  padding: 0 10px;\n  color: var(--foreground);\n  background: var(--surface);\n  font-size: var(--text-xs);\n  font-weight: 500;\n  letter-spacing: -0.01em;\n  line-height: 1;\n  white-space: nowrap;\n  user-select: none;\n  overflow: clip;\n  transition:\n    border-color var(--duration-standard) var(--ease-standard),\n    background-color var(--duration-standard) var(--ease-standard),\n    color var(--duration-standard) var(--ease-standard);\n}\n\n.sm {\n  min-height: 20px;\n  padding: 0 7px;\n  font-size: 11px;\n}\n\n.md {\n  min-height: 26px;\n  padding: 0 10px;\n  font-size: var(--text-xs);\n}\n\n/* Tones - 采用低饱和 Zinc 与克制语义色 */\n.neutral {\n  background: var(--surface-muted);\n  color: var(--foreground);\n  border-color: var(--border);\n}\n\n.success {\n  background: color-mix(in oklch, var(--success) 12%, transparent);\n  color: var(--success);\n  border-color: color-mix(in oklch, var(--success) 24%, transparent);\n}\n\n.info {\n  background: color-mix(in oklch, var(--accent) 12%, transparent);\n  color: var(--accent);\n  border-color: color-mix(in oklch, var(--accent) 24%, transparent);\n}\n\n.warning {\n  background: color-mix(in oklch, var(--warning) 12%, transparent);\n  color: var(--warning);\n  border-color: color-mix(in oklch, var(--warning) 24%, transparent);\n}\n\n.danger {\n  background: color-mix(in oklch, var(--danger) 12%, transparent);\n  color: var(--danger);\n  border-color: color-mix(in oklch, var(--danger) 24%, transparent);\n}\n\n.content {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n}\n\n.iconSlot {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 0.9em;\n}\n"
+    },
+    {
+      "path": "registry/components/badge/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/badge/index.ts",
+      "content": "export { default as Badge } from \"./Badge.vue\";\nexport type { BadgeProps, BadgeTone, BadgeSize } from \"./Badge.vue\";\n"
+    }
+  ]
+}

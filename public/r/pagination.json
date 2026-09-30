@@ -1,0 +1,37 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "pagination",
+  "type": "registry:ui",
+  "title": "Pagination",
+  "description": "平静物理微动效组件：Pagination",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/pagination/Pagination.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/pagination/Pagination.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { ChevronLeft, ChevronRight } from \"lucide-vue-next\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./pagination.module.css\";\n\nexport interface PaginationProps {\n  page: number;\n  pageCount: number;\n  label?: string;\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<PaginationProps>(), {\n  label: \"Pagination\",\n});\n\nconst emit = defineEmits<{\n  (e: \"update:page\", page: number): void;\n  (e: \"change\", page: number): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\nconst safePageCount = computed(() => Math.max(0, Math.floor(props.pageCount)));\nconst currentPage = computed(() =>\n  safePageCount.value > 0\n    ? Math.min(Math.max(1, Math.floor(props.page)), safePageCount.value)\n    : 0\n);\n\nconst start = computed(() =>\n  safePageCount.value > 0\n    ? Math.max(1, Math.min(safePageCount.value - 4, currentPage.value - 2))\n    : 1\n);\n\nconst visiblePages = computed(() => {\n  const len = Math.min(safePageCount.value, 5);\n  return Array.from({ length: len }, (_, i) => start.value + i);\n});\n\nfunction goTo(p: number) {\n  if (p < 1 || p > safePageCount.value || p === currentPage.value) return;\n  emit(\"update:page\", p);\n  emit(\"change\", p);\n}\n</script>\n\n<template>\n  <nav :class=\"[styles.nav, props.class]\" :aria-label=\"label\">\n    <button\n      type=\"button\"\n      :class=\"styles.step\"\n      :disabled=\"currentPage <= 1\"\n      aria-label=\"Previous page\"\n      @click=\"goTo(currentPage - 1)\"\n    >\n      <ChevronLeft :size=\"16\" aria-hidden=\"true\" />\n    </button>\n\n    <div :class=\"styles.pages\">\n      <button\n        v-for=\"num in visiblePages\"\n        :key=\"num\"\n        type=\"button\"\n        :class=\"[\n          styles.pageButton,\n          currentPage === num ? styles.active : undefined,\n        ]\"\n        :aria-current=\"currentPage === num ? 'page' : undefined\"\n        @click=\"goTo(num)\"\n      >\n        <motion.span\n          v-if=\"currentPage === num\"\n          :class=\"styles.mark\"\n          layout-id=\"pagination-mark\"\n          :transition=\"\n            prefersReduced ? { duration: 0 } : motionTokens.spring.morph\n          \"\n          aria-hidden=\"true\"\n        />\n        <span :class=\"styles.pageLabel\">{{ num }}</span>\n      </button>\n    </div>\n\n    <button\n      type=\"button\"\n      :class=\"styles.step\"\n      :disabled=\"currentPage >= safePageCount\"\n      aria-label=\"Next page\"\n      @click=\"goTo(currentPage + 1)\"\n    >\n      <ChevronRight :size=\"16\" aria-hidden=\"true\" />\n    </button>\n  </nav>\n</template>\n"
+    },
+    {
+      "path": "registry/components/pagination/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/pagination/index.ts",
+      "content": "export { default as Pagination } from \"./Pagination.vue\";\nexport * from \"./Pagination.vue\";\n"
+    },
+    {
+      "path": "registry/components/pagination/pagination.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/pagination/pagination.module.css",
+      "content": ".nav { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }\n.nav button { position: relative; display: grid; width: var(--control-height-sm); height: var(--control-height-sm); place-items: center; border: 1px solid transparent; border-radius: var(--radius-control); background: transparent; color: var(--text-secondary); font: inherit; font-size: var(--text-xs); font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard); }\n.nav button[aria-current=\"page\"] { color: var(--foreground); }\n/* One shared mark travels between pages. Before it has measured (server render), the button draws its own. */\n.mark { position: absolute; top: 0; left: 0; width: var(--control-height-sm); height: var(--control-height-sm); box-sizing: border-box; border: 1px solid var(--border); border-radius: var(--radius-control); background: var(--surface); box-shadow: var(--shadow-resting); opacity: 0; pointer-events: none; }\n.nav[data-mark-ready] .mark { opacity: 1; }\n.nav:not([data-mark-ready]) button[aria-current=\"page\"] { border-color: var(--border); background: var(--surface); box-shadow: var(--shadow-resting); }\n/* Only the arrows press in. Page numbers move with Motion, so they keep CSS off transform and opacity. */\n.nav .step { transition: background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard), opacity var(--duration-fast) var(--ease-standard), transform var(--duration-spring) var(--ease-spring); }\n.nav .step:active:not(:disabled) { transform: scale(.96); transition-duration: var(--duration-fast), var(--duration-fast), var(--duration-fast), 100ms; transition-timing-function: var(--ease-standard), var(--ease-standard), var(--ease-standard), ease-out; }\n.nav button:disabled { opacity: .4; cursor: not-allowed; }\n.nav button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }\n@media (hover: hover) and (pointer: fine) {\n  .nav button:hover:not(:disabled) { background: var(--surface-muted); color: var(--foreground); }\n  .nav[data-mark-ready] button[aria-current=\"page\"]:hover { background: transparent; }\n}\n@media (prefers-reduced-motion: reduce) { .nav button, .nav .step { transition: none; } .nav .step:active:not(:disabled) { transform: none; } }\n"
+    }
+  ]
+}

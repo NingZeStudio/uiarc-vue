@@ -1,0 +1,193 @@
+.field {
+  --nf-height: var(--control-height-md);
+  --nf-step: 34px;
+  --nf-inset: 3px;
+  --nf-text: var(--text-base);
+  --nf-width: var(--number-field-width, 210px);
+  --nf-limit: color-mix(in oklch, var(--warning) 72%, var(--foreground));
+  display: grid;
+  min-width: 0;
+  user-select: none;
+}
+
+.field[data-size="sm"] {
+  --nf-height: var(--control-height-sm);
+  --nf-step: 28px;
+  --nf-inset: 3px;
+  --nf-text: var(--text-sm);
+  --nf-width: var(--number-field-width, 175px);
+}
+
+.field[data-size="lg"] {
+  --nf-height: var(--control-height-lg);
+  --nf-step: 40px;
+  --nf-inset: 4px;
+  --nf-text: var(--text-lg);
+  --nf-width: var(--number-field-width, 240px);
+}
+
+:root[data-theme="dark"] .field {
+  --nf-limit: color-mix(in oklch, var(--warning) 88%, var(--foreground));
+}
+
+.head {
+  display: flex;
+  width: min(100%, var(--nf-width));
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.label {
+  min-width: 0;
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: var(--leading-body);
+}
+
+.field[data-size="sm"] .label {
+  font-size: var(--text-xs);
+}
+
+.limit {
+  flex: none;
+  color: var(--nf-limit);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: var(--leading-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.label[data-scrub] {
+  cursor: ew-resize;
+  touch-action: pan-y;
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(100%, var(--nf-width));
+  min-height: var(--nf-height);
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  padding: var(--nf-inset);
+  background: var(--surface);
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-standard) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .control:hover {
+    border-color: var(--border-strong);
+  }
+}
+
+.control:focus-within {
+  border-color: var(--border-strong);
+}
+
+.control[data-warn] {
+  border-color: color-mix(in oklch, var(--warning) 55%, var(--border));
+}
+
+.control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stepButton {
+  position: relative;
+  display: inline-flex;
+  width: var(--nf-step);
+  height: var(--nf-step);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: calc(var(--radius-control) - var(--nf-inset));
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.stepButton:hover:not(:disabled) {
+  background: var(--surface-muted);
+  color: var(--foreground);
+}
+
+.stepButton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.valueContainer {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  height: 100%;
+}
+
+.valueWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nf-text);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--foreground);
+}
+
+/* Odometer 数字轮盘样式 */
+.column {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 1.25em;
+  overflow: hidden;
+}
+
+.symbol {
+  display: inline-block;
+  opacity: 0.75;
+}
+
+.sizer {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+.glyph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.affix {
+  color: var(--text-muted);
+  font-size: 0.85em;
+  margin: 0 2px;
+}

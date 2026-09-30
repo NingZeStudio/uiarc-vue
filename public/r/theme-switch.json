@@ -1,0 +1,42 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "theme-switch",
+  "type": "registry:ui",
+  "title": "Theme Switch",
+  "description": "平静物理微动效组件：Theme Switch",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/theme-switch/ThemeSwitch.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/theme-switch/ThemeSwitch.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./button.module.css\";\n\nexport type ThemeSwitchVariant = \"reveal\" | \"eclipse\" | \"split\" | \"rise\";\nexport type Theme = \"light\" | \"dark\";\n\ninterface ThemeSwitchProps {\n  theme: Theme;\n  variant?: ThemeSwitchVariant;\n  onThemeChange: (next: Theme, variant: ThemeSwitchVariant, trigger: HTMLElement) => void;\n  label?: string;\n  iconOnly?: boolean;\n}\n\nconst props = withDefaults(defineProps<ThemeSwitchProps>(), {});\nconst emit = defineEmits<{\n  (e: \"change\", val: any): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n</script>\n\n<template>\n  <div :class=\"[styles?.root || styles?.container || styles?.theme_switch || '']\">\n    <slot />\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/theme-switch/button.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/theme-switch/button.module.css",
+      "content": "/* Press scale is driven by Motion (whileTap) alone, so transform never gets a CSS transition here. */\n.button { position: relative; display: inline-flex; min-height: var(--control-height-md); align-items: center; justify-content: center; gap: var(--space-2); border: 1px solid transparent; border-radius: var(--radius-control); padding: 0 var(--space-4); font: inherit; font-size: var(--text-sm); font-weight: 500; line-height: var(--leading-body); white-space: nowrap; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color var(--duration-fast) var(--ease-standard), background var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), opacity var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard); }\n.button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }\n.button:disabled { cursor: not-allowed; opacity: .52; }\n.button[aria-busy=\"true\"] { cursor: progress; }\n/* Anchors of floating layers never scale: Radix opens on pointerdown and would measure a shrunken trigger. */\n.button:is([aria-haspopup]:not([aria-haspopup=\"false\"]), [data-state], [role=\"combobox\"]) { transform: none !important; }\n/* The slot's width follows the incoming label on a spring. The label stays centered and may overflow evenly while the slot catches up;\n   the outgoing label pops out of flow against the slot itself, so it keeps its place instead of following the new content box. */\n.labelSlot { position: relative; display: inline-flex; min-width: 0; align-items: center; justify-content: center; transition: opacity var(--duration-fast) var(--ease-standard); }\n.labelSlot[data-morphing] { clip-path: inset(-50% calc(var(--space-3) * -1)); }\n.labelContent { display: inline-flex; flex: none; align-items: center; }\n.labelPhase { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); white-space: nowrap; }\n.labelPhase svg { flex: none; }\n.primary { color: var(--background); background: var(--foreground); border-color: var(--foreground); }\n.secondary { color: var(--foreground); background: var(--surface); border-color: var(--border); }\n.ghost { color: var(--text-secondary); background: transparent; border-color: transparent; }\n.danger { color: var(--danger); background: var(--surface); border-color: var(--border); }\n@media (hover: hover) and (pointer: fine) {\n  .primary:hover:not(:disabled) { opacity: .91; box-shadow: var(--shadow-resting); }\n  .secondary:hover:not(:disabled) { background: var(--surface-muted); box-shadow: var(--shadow-resting); }\n  .ghost:hover:not(:disabled) { color: var(--foreground); background: var(--surface-muted); }\n  .danger:hover:not(:disabled) { border-color: var(--danger); background: var(--surface-muted); }\n}\n/* Color feedback on press, so touch and menu triggers (which never scale) still answer the finger. */\n.primary:active:not(:disabled) { opacity: .84; }\n.secondary:active:not(:disabled), .ghost:active:not(:disabled) { color: var(--foreground); background: var(--surface-muted); }\n.danger:active:not(:disabled) { border-color: var(--danger); background: var(--surface-muted); }\n.sm { min-height: var(--control-height-sm); padding-inline: var(--space-3); font-size: var(--text-sm); }\n.md { min-height: var(--control-height-md); }\n.lg { min-height: var(--control-height-lg); padding-inline: var(--space-5); font-size: var(--text-sm); }\n.loader { position: absolute; left: 50%; top: 50%; display: grid; width: var(--space-4); height: var(--space-4); margin: calc(var(--space-4) / -2); }\n.spinner { border: 1.5px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }\n.loadingLabel { opacity: 0; }\n@keyframes spin { to { transform: rotate(360deg); } }\n@media (prefers-reduced-motion: reduce) { .button { transition: none; } .labelSlot { transition: opacity var(--duration-instant) linear; } .spinner { animation-duration: .01ms; animation-iteration-count: 1; } }\n"
+    },
+    {
+      "path": "registry/components/theme-switch/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/theme-switch/index.ts",
+      "content": "export { default as ThemeSwitch } from \"./ThemeSwitch.vue\";\nexport * from \"./ThemeSwitch.vue\";\n"
+    },
+    {
+      "path": "registry/components/theme-switch/theme-switch.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/theme-switch/theme-switch.module.css",
+      "content": "/* Each transition uses the same library Button, which owns the press scale; this file only animates the icon in place. */\n.themeSwitch {\n  position: relative;\n  width: auto;\n  padding-inline: var(--space-3);\n}\n.iconOnly { width: 38px; min-width: 38px; height: 38px; min-height: 38px; border-radius: 12px; padding: 0; }\n@media (hover: hover) and (pointer: fine) {\n  .themeSwitch:hover:not(:disabled) { border-color: var(--border-strong); }\n  .iconOnly:hover:not(:disabled) { background: var(--surface-muted); box-shadow: none; }\n}\n.themeSwitch:focus-visible { outline-offset: 3px; }\n.iconWrap {\n  position: relative;\n  display: inline-grid;\n  width: 20px;\n  height: 20px;\n  flex: 0 0 20px;\n  place-items: center;\n}\n/* The nudge only eases once the switch has settled, so a theme that arrives during hydration lands without motion. */\n.settled .iconWrap { transition: transform var(--duration-spring) var(--ease-spring); }\n.icon { position: absolute; display: grid; width: 18px; height: 18px; place-items: center; }\n.label { white-space: nowrap; }\n/* Each variant nudges the icon the way its page transition travels, and eases back when the theme returns. */\n.themeSwitch.reveal[data-theme=\"dark\"] .iconWrap { transform: scale(1.08); }\n.themeSwitch.eclipse[data-theme=\"dark\"] .iconWrap { transform: translateX(-2px); }\n.themeSwitch.split[data-theme=\"dark\"] .iconWrap { transform: translateX(1px); }\n.themeSwitch.rise[data-theme=\"dark\"] .iconWrap { transform: translateY(-2px); }\n@media (prefers-reduced-motion: reduce) {\n  .settled .iconWrap { transition: none; }\n}\n"
+    }
+  ]
+}

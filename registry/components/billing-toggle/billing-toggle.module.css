@@ -1,0 +1,124 @@
+.root {
+  --_accent: var(--billing-accent, var(--success));
+  --_h: 34px;
+  --_pad: 3px;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  padding: var(--_pad);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--surface-muted);
+  font-family: var(--font-body, sans-serif);
+  font-size: var(--text-sm);
+  line-height: 1;
+  user-select: none;
+}
+
+.root[data-size="lg"] {
+  --_h: 42px;
+  --_pad: 4px;
+  font-size: var(--text-base);
+}
+
+.thumb,
+.thumbStatic {
+  position: absolute;
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border-subtle), 0 1px 2px oklch(0% 0 0 / 0.06), 0 2px 6px oklch(0% 0 0 / 0.04);
+  pointer-events: none;
+}
+
+.thumb {
+  top: var(--_pad);
+  bottom: var(--_pad);
+  left: 0;
+  will-change: transform, width;
+}
+
+.thumbStatic {
+  inset: 0;
+}
+
+:root[data-theme="dark"] .thumb,
+:root[data-theme="dark"] .thumbStatic {
+  background: var(--surface-raised);
+  box-shadow: 0 0 0 1px var(--border), inset 0 1px 0 oklch(100% 0 0 / 0.05), 0 1px 2px oklch(0% 0 0 / 0.3);
+}
+
+.option {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  height: var(--_h);
+  align-items: center;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.option:hover {
+  color: var(--foreground);
+}
+
+.option[data-selected] {
+  color: var(--foreground);
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label {
+  display: inline-block;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  padding: 2px 7px;
+  background: color-mix(in oklch, var(--_accent) 12%, transparent);
+  color: var(--_accent);
+  font-size: 11px;
+  font-weight: 600;
+  transition: background-color var(--duration-standard) var(--ease-standard), color var(--duration-standard) var(--ease-standard);
+}
+
+.badge[data-active] {
+  background: var(--_accent);
+  color: #fff;
+}
+
+.swap {
+  position: relative;
+  display: inline-grid;
+  grid-template-areas: "swap";
+  align-items: center;
+}
+
+.swapSizer {
+  grid-area: swap;
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+.swapText {
+  grid-area: swap;
+  display: inline-flex;
+  align-items: center;
+}

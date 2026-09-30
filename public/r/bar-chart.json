@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "bar-chart",
+  "type": "registry:ui",
+  "title": "Bar Chart",
+  "description": "平静物理微动效组件：Bar Chart",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/bar-chart/BarChart.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/bar-chart/BarChart.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./bar-chart.module.css\";\n\n\n\ninterface BarChartProps {\n  data: BarChartDatum[];\n  /** What is measured, such as \"Active minutes\". Names the chart for assistive technology. */\n  label: string;\n  /** The range on show, such as \"Sep 15–21, 2026\". It rests under the headline. */\n  period: string;\n  /** Unit after each value, such as \"min\". */\n  unit?: string;\n  /** Headline label at rest, above the average. */\n  averageLabel?: string;\n  /** Headline label while a bar is scrubbed. */\n  valueLabel?: string;\n  /** Header of the first column in the data table read by screen readers. */\n  categoryLabel?: string;\n  /** Draws the average as a reference line that springs to each new range. */\n  showAverage?: boolean;\n  /** Plot height in pixels. */\n  height?: number;\n  formatValue?: (value: number) => string;\n}\n\nconst props = withDefaults(defineProps<BarChartProps>(), {});\nconst emit = defineEmits<{\n  (e: \"change\", val: any): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n</script>\n\n<template>\n  <div :class=\"[styles?.root || styles?.container || styles?.bar_chart || '']\">\n    <slot />\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/bar-chart/bar-chart.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/bar-chart/bar-chart.module.css",
+      "content": ".figure { display: grid; min-width: 0; gap: var(--space-5); margin: 0; color: var(--foreground); }\n\n/* The headline is the readout: the average at rest, the scrubbed bar while exploring. Each line keeps its height, so swaps never move the plot. */\n.header { display: grid; min-width: 0; gap: 2px; }\n.kind, .when { display: block; min-height: calc(1em * var(--leading-body)); font-size: var(--text-sm); line-height: var(--leading-body); }\n.kind { color: var(--text-secondary); }\n.when { color: var(--text-muted); }\n.value { display: flex; min-width: 0; align-items: baseline; gap: 6px; font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 500; letter-spacing: var(--tracking-display); line-height: var(--leading-display); font-variant-numeric: tabular-nums; }\n.unit { color: var(--text-secondary); font-family: var(--font-body); font-size: var(--text-base); font-weight: 400; letter-spacing: var(--tracking-body); }\n.swap { position: relative; display: block; min-width: 0; }\n.swapText { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n/* A rolling number: outgoing digits are popped out of flow and anchored right, and the clip hides a digit still rising into a new place. */\n.roll { position: relative; display: inline-flex; justify-content: flex-end; overflow-x: clip; overflow-y: visible; white-space: pre; }\n.digits { position: relative; display: inline-flex; flex: none; }\n.digit { position: relative; display: inline-block; white-space: pre; }\n.sizer { position: absolute; top: 0; left: 0; visibility: hidden; white-space: pre; pointer-events: none; }\n\n/* Plot, right-hand value axis, and the date axis beneath. */\n.chart { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 52px; grid-template-rows: auto 26px; min-width: 0; }\n.plot { position: relative; grid-area: 1 / 1; min-width: 0; }\n.svg { display: block; overflow: hidden; }\n.grid { stroke: var(--border); stroke-width: 1; shape-rendering: crispEdges; }\n.baseline { stroke: var(--border-strong); stroke-width: 1; shape-rendering: crispEdges; }\n.cursor { stroke: var(--border-strong); stroke-width: 1; shape-rendering: crispEdges; }\n.mean { stroke: var(--text-secondary); stroke-width: 1; stroke-dasharray: 3 3; shape-rendering: crispEdges; }\n/* The series is drawn in a soft step of the accent; the scrubbed bar takes the full accent while its neighbours step back. */\n.bar { fill: color-mix(in oklch, var(--accent) 62%, var(--surface)); transition: fill var(--duration-fast) var(--ease-standard); }\n.chart[data-scrubbing] .bar { fill: color-mix(in oklch, var(--accent) 24%, var(--surface)); }\n/* On a dark surface a lighter mix keeps the hue clear instead of turning muddy. */\n:global([data-theme=\"dark\"]) .bar { fill: color-mix(in oklch, var(--accent) 76%, var(--surface)); }\n:global([data-theme=\"dark\"]) .chart[data-scrubbing] .bar { fill: color-mix(in oklch, var(--accent) 34%, var(--surface)); }\n:global([data-theme=\"dark\"]) .chart .bar[data-active] { fill: var(--accent); }\n.chart .bar[data-active] { fill: var(--accent); }\n\n.gutter { position: relative; grid-area: 1 / 2; min-width: 0; }\n.tick, .meanLabel { position: absolute; top: 0; left: 10px; display: block; height: 0; white-space: nowrap; pointer-events: none; }\n.tickText { display: block; transform: translateY(-50%); color: var(--text-muted); font-size: var(--text-xs); line-height: 1; font-variant-numeric: tabular-nums; }\n.meanLabel .tickText { color: var(--foreground); font-weight: 500; }\n\n.axis { position: relative; grid-area: 2 / 1; min-width: 0; overflow: hidden; }\n.axisLabel { position: absolute; top: 8px; left: 0; color: var(--text-muted); font-size: var(--text-xs); line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }\n\n/* The scrubber covers the plot and its axes. Horizontal drags scrub, vertical swipes still scroll the page. */\n.scrubber { position: absolute; inset: 0; border-radius: calc(var(--radius-control) / 2); outline: none; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }\n.scrubber:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 6px; }\n\n.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }\n@media (prefers-reduced-motion: reduce) { .bar { transition: none; } }\n.measure { position: absolute; top: 0; left: 0; display: flex; visibility: hidden; pointer-events: none; }\n.measure > span { flex: none; font-size: var(--text-xs); line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }\n"
+    },
+    {
+      "path": "registry/components/bar-chart/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/bar-chart/index.ts",
+      "content": "export { default as BarChart } from \"./BarChart.vue\";\nexport * from \"./BarChart.vue\";\n"
+    }
+  ]
+}

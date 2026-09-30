@@ -1,0 +1,37 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "toast",
+  "type": "registry:ui",
+  "title": "Toast",
+  "description": "平静物理微动效组件：Toast",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/toast/Toast.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/toast/Toast.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, onMounted, onUnmounted } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { X } from \"lucide-vue-next\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./toast.module.css\";\n\nexport interface ToastProps {\n  title: string;\n  description?: string;\n  open?: boolean;\n  duration?: number;\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<ToastProps>(), {\n  open: true,\n  duration: 4500,\n});\n\nconst emit = defineEmits<{\n  (e: \"update:open\", val: boolean): void;\n  (e: \"close\"): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\nconst visible = ref(props.open);\nlet timer: any = null;\n\nfunction close() {\n  visible.value = false;\n  emit(\"update:open\", false);\n  emit(\"close\");\n}\n\nonMounted(() => {\n  if (props.duration > 0 && props.duration !== Infinity) {\n    timer = setTimeout(close, props.duration);\n  }\n});\n\nonUnmounted(() => {\n  if (timer) clearTimeout(timer);\n});\n</script>\n\n<template>\n  <AnimatePresence>\n    <motion.div\n      v-if=\"visible\"\n      :class=\"[styles.toast, props.class]\"\n      role=\"status\"\n      :initial=\"\n        prefersReduced\n          ? { opacity: 0 }\n          : { opacity: 0, y: 16, scale: 0.95 }\n      \"\n      :animate=\"{ opacity: 1, y: 0, scale: 1 }\"\n      :exit=\"\n        prefersReduced\n          ? { opacity: 0 }\n          : { opacity: 0, y: 8, scale: 0.96 }\n      \"\n      :transition=\"\n        prefersReduced ? { duration: 0.1 } : motionTokens.spring.snappy\n      \"\n    >\n      <div :class=\"styles.content\">\n        <h4 :class=\"styles.title\">{{ title }}</h4>\n        <p v-if=\"description\" :class=\"styles.description\">{{ description }}</p>\n      </div>\n\n      <button\n        type=\"button\"\n        :class=\"styles.close\"\n        aria-label=\"Close notification\"\n        @click=\"close\"\n      >\n        <X :size=\"14\" aria-hidden=\"true\" />\n      </button>\n    </motion.div>\n  </AnimatePresence>\n</template>\n"
+    },
+    {
+      "path": "registry/components/toast/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/toast/index.ts",
+      "content": "export { default as Toast } from \"./Toast.vue\";\nexport * from \"./Toast.vue\";\n"
+    },
+    {
+      "path": "registry/components/toast/toast.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/toast/toast.module.css",
+      "content": ".toast {\n  display: flex;\n  width: min(100%, 26rem);\n  min-width: 0;\n  align-items: flex-start;\n  gap: 0.75rem;\n  padding: 0.875rem 0.875rem 0.875rem 1rem;\n  border: 1px solid var(--border);\n  border-radius: var(--radius-panel);\n  background: color-mix(in oklch, var(--surface) 94%, var(--background));\n  color: var(--foreground);\n  box-shadow: var(--shadow-floating);\n}\n\n.icon {\n  display: grid;\n  width: 1.875rem;\n  height: 1.875rem;\n  flex: 0 0 auto;\n  place-items: center;\n  border: 1px solid color-mix(in oklch, var(--success) 24%, var(--border));\n  border-radius: var(--radius-pill);\n  background: color-mix(in oklch, var(--success) 10%, var(--surface));\n  color: var(--success);\n}\n\n.frame {\n  display: block;\n  min-width: 0;\n  flex: 1;\n}\n\n.copy {\n  position: relative;\n  display: grid;\n  min-width: 0;\n  gap: 0.25rem;\n  padding-top: 0.125rem;\n}\n\n.title {\n  position: relative;\n  display: block;\n  min-width: 0;\n  font-size: var(--text-sm);\n  font-weight: 500;\n  line-height: 1.35;\n}\n\n.line {\n  display: block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.description {\n  display: block;\n  color: var(--text-secondary);\n  font-size: var(--text-sm);\n  line-height: var(--leading-body);\n}\n\n.close {\n  display: grid;\n  width: 2rem;\n  height: 2rem;\n  flex: 0 0 auto;\n  place-items: center;\n  margin: -0.125rem -0.125rem 0 0;\n  border: 0;\n  border-radius: var(--radius-pill);\n  background: transparent;\n  color: var(--text-muted);\n  cursor: pointer;\n  transition: transform var(--duration-spring) var(--ease-spring),\n    background-color var(--duration-fast) var(--ease-standard),\n    color var(--duration-fast) var(--ease-standard);\n}\n\n@media (hover: hover) and (pointer: fine) {\n  .close:hover {\n    background: var(--surface-muted);\n    color: var(--foreground);\n  }\n}\n\n/* Quick press, spring release. */\n.close:active {\n  transform: scale(0.96);\n  transition-duration: var(--duration-instant);\n  transition-timing-function: var(--ease-standard);\n}\n\n.close:focus-visible {\n  outline: 3px solid var(--focus-ring);\n  outline-offset: 2px;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .close { transition: none; }\n  .close:active { transform: none; }\n}\n"
+    }
+  ]
+}

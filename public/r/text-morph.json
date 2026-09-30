@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "text-morph",
+  "type": "registry:ui",
+  "title": "Text Morph",
+  "description": "平静物理微动效组件：Text Morph",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/text-morph/TextMorph.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/text-morph/TextMorph.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./text-morph.module.css\";\n\nexport interface TextMorphProps {\n  text?: string;\n  as?: \"span\" | \"div\" | \"p\" | \"strong\" | \"h1\" | \"h2\" | \"h3\";\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<TextMorphProps>(), {\n  as: \"span\",\n  text: \"\",\n});\n\nconst prefersReduced = useReducedMotion();\n\nconst glyphs = computed(() => {\n  const seen = new Map<string, number>();\n  return Array.from(props.text).map((char) => {\n    const count = seen.get(char) ?? 0;\n    seen.set(char, count + 1);\n    return { char, key: `${char}-${count}` };\n  });\n});\n</script>\n\n<template>\n  <component :is=\"as\" :class=\"[styles.morph, props.class]\">\n    <span :class=\"styles.track\">\n      <AnimatePresence mode=\"popLayout\" :initial=\"false\">\n        <motion.span\n          v-for=\"(glyph, idx) in glyphs\"\n          :key=\"glyph.key\"\n          :class=\"styles.glyph\"\n          :initial=\"\n            prefersReduced\n              ? { opacity: 0 }\n              : { opacity: 0, y: 4, filter: `blur(${motionTokens.blur.soft}px)` }\n          \"\n          :animate=\"{ opacity: 1, y: 0, filter: 'blur(0px)' }\"\n          :exit=\"\n            prefersReduced\n              ? { opacity: 0 }\n              : { opacity: 0, y: -4, filter: `blur(${motionTokens.blur.subtle}px)` }\n          \"\n          :transition=\"{\n            duration: prefersReduced ? 0 : motionTokens.duration.standard,\n            ease: [...motionTokens.ease.enter],\n            delay: idx * motionTokens.stagger.char,\n          }\"\n        >\n          {{ glyph.char }}\n        </motion.span>\n      </AnimatePresence>\n    </span>\n  </component>\n</template>\n"
+    },
+    {
+      "path": "registry/components/text-morph/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/text-morph/index.ts",
+      "content": "export { default as TextMorph } from \"./TextMorph.vue\";\nexport * from \"./TextMorph.vue\";\n"
+    },
+    {
+      "path": "registry/components/text-morph/text-morph.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/text-morph/text-morph.module.css",
+      "content": "/* The frame carries the animated width. Its mask reveals new letters through a soft trailing edge as it grows and fades leaving ones as it shrinks.\n   Padding with matching negative margins gives the mask room for blur and descenders without changing layout; the edge sits entirely in that room, so resting text is never dimmed.\n   The track always starts at the frame's leading edge, even in centered text: otherwise it would recenter inside the old width and leaving letters would jump. */\n.frame.frame, .frame { position: relative; display: inline-block; box-sizing: content-box; padding: .5em .5em .5em .2em; margin: -.5em -.5em -.5em -.2em; text-align: start; white-space: nowrap; mask-image: linear-gradient(90deg, #000 calc(100% - .5em), transparent); }\n/* The track sizes to the letters in flow. Leaving letters are taken out of flow and positioned against it. */\n.track { position: relative; display: inline-block; white-space: nowrap; }\n.glyph { display: inline-block; white-space: pre; transform-origin: 50% 60%; }\n.srOnly { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; user-select: none; }\n"
+    }
+  ]
+}

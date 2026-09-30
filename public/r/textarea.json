@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "textarea",
+  "type": "registry:ui",
+  "title": "Textarea",
+  "description": "平静物理微动效组件：Textarea",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/textarea/Textarea.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/textarea/Textarea.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./textarea.module.css\";\n\nexport interface TextareaProps {\n  modelValue?: string;\n  label?: string;\n  description?: string;\n  error?: string;\n  placeholder?: string;\n  disabled?: boolean;\n  rows?: number;\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<TextareaProps>(), {\n  modelValue: \"\",\n  rows: 3,\n  disabled: false,\n});\n\nconst emit = defineEmits<{\n  (e: \"update:modelValue\", val: string): void;\n  (e: \"change\", e: Event): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\nconst isFocused = ref(false);\n\nfunction handleInput(event: Event) {\n  const val = (event.target as HTMLTextAreaElement).value;\n  emit(\"update:modelValue\", val);\n}\n</script>\n\n<template>\n  <div :class=\"[styles.field, props.class]\">\n    <label v-if=\"label\" :class=\"styles.label\">{{ label }}</label>\n    <div\n      :class=\"styles.shell\"\n      :data-focused=\"isFocused ? '' : undefined\"\n      :data-error=\"error ? '' : undefined\"\n      :data-disabled=\"disabled ? '' : undefined\"\n    >\n      <textarea\n        :class=\"styles.textarea\"\n        :value=\"modelValue\"\n        :placeholder=\"placeholder\"\n        :disabled=\"disabled\"\n        :rows=\"rows\"\n        @focus=\"isFocused = true\"\n        @blur=\"isFocused = false\"\n        @input=\"handleInput\"\n      />\n    </div>\n\n    <!-- Description or Error message with spring open height and subtle blur -->\n    <AnimatePresence>\n      <motion.div\n        v-if=\"error || description\"\n        :key=\"error ? 'err' : 'desc'\"\n        :class=\"styles.messageSlot\"\n        :initial=\"\n          prefersReduced\n            ? false\n            : { height: 0, opacity: 0 }\n        \"\n        :animate=\"{ height: 'auto', opacity: 1 }\"\n        :exit=\"{\n          height: 0,\n          opacity: 0,\n          transition: prefersReduced\n            ? { duration: 0 }\n            : {\n                height: motionTokens.spring.smooth,\n                opacity: { duration: motionTokens.duration.instant },\n              },\n        }\"\n        :transition=\"\n          prefersReduced\n            ? { duration: 0 }\n            : {\n                height: motionTokens.spring.smooth,\n                opacity: { duration: motionTokens.duration.fast },\n              }\n        \"\n      >\n        <span\n          :class=\"[styles.message, error ? styles.error : styles.hint]\"\n          :role=\"error ? 'alert' : undefined\"\n        >\n          {{ error || description }}\n        </span>\n      </motion.div>\n    </AnimatePresence>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/textarea/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/textarea/index.ts",
+      "content": "export { default as Textarea } from \"./Textarea.vue\";\nexport * from \"./Textarea.vue\";\n"
+    },
+    {
+      "path": "registry/components/textarea/textarea.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/textarea/textarea.module.css",
+      "content": "/* No row gap: grid tracks clamp a negative margin at zero, so a closed message row would still pay the gap. Each row carries its own space instead. */\n.field { display: grid; min-width: 0; }\n.field label { margin-bottom: var(--space-2); font-size: var(--text-sm); font-weight: 500; }\n/* Same focus language as Input: the ring contracts onto the border while it fades in, and the box never changes size. */\n.control { width: 100%; min-height: 110px; resize: vertical; border: 1px solid var(--border-strong); border-radius: var(--radius-control); padding: var(--space-3); background: var(--surface); color: var(--foreground); font: inherit; font-size: var(--text-sm); line-height: var(--leading-body); outline: none; box-shadow: 0 0 0 6px transparent; transition: border-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-standard) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard); }\n.control::placeholder { color: var(--text-muted); }\n@media (hover: hover) and (pointer: fine) { .control:hover:not(:disabled, [aria-invalid=\"true\"]) { border-color: var(--foreground); } }\n.control:focus-visible { border-color: var(--foreground); box-shadow: 0 0 0 3px var(--focus-ring); outline: 2px solid transparent; outline-offset: 2px; }\n.control[aria-invalid=\"true\"] { border-color: var(--danger); }\n.control[aria-invalid=\"true\"]:focus-visible { box-shadow: 0 0 0 3px color-mix(in oklch, var(--danger) 24%, transparent); }\n.control:disabled { cursor: not-allowed; background: var(--surface-muted); opacity: .6; }\n/* The row's space is padding inside the clipped slot, so the height animates from a true zero. */\n.messageSlot { display: block; overflow: hidden; }\n.hint, .error { display: block; padding-top: var(--space-2); font-size: var(--text-xs); line-height: var(--leading-body); }\n.hint { color: var(--text-muted); } .error { color: var(--danger); }\n/* Words are measured against this box when they pop out to leave, so it must be the positioned parent. */\n.words { position: relative; display: block; }\n.word { display: inline-block; white-space: pre; }\n/* One column per character of a count. Tabular digits keep columns equal, so only a gained or lost digit changes the width. */\n.column { position: relative; display: inline-flex; justify-content: center; font-variant-numeric: tabular-nums; }\n.column > span { display: inline-block; }\n.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }\n@media (prefers-reduced-motion: reduce) { .control { transition: none; } }\n"
+    }
+  ]
+}

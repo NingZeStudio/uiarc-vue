@@ -1,0 +1,37 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "progress",
+  "type": "registry:ui",
+  "title": "Progress",
+  "description": "平静物理微动效组件：Progress",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/progress/Progress.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/progress/Progress.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed, watch, onMounted } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { Check } from \"lucide-vue-next\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./progress.module.css\";\n\nexport interface ProgressProps {\n  value?: number;\n  max?: number;\n  label?: string;\n  showValue?: boolean;\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<ProgressProps>(), {\n  value: 0,\n  max: 100,\n  showValue: false,\n});\n\nconst prefersReduced = useReducedMotion();\nconst safeMax = computed(() => (props.max > 0 ? props.max : 100));\nconst safeValue = computed(() =>\n  Math.min(Math.max(props.value, 0), safeMax.value)\n);\nconst percentage = computed(() =>\n  Math.round((safeValue.value / safeMax.value) * 100)\n);\nconst isComplete = computed(() => percentage.value >= 100);\n\nconst displayPercent = ref(percentage.value);\n\nlet rafId: number | null = null;\nwatch(percentage, (target) => {\n  if (prefersReduced.value) {\n    displayPercent.value = target;\n    return;\n  }\n  const start = displayPercent.value;\n  const startTime = performance.now();\n  const duration = 400;\n\n  function step(now: number) {\n    const elapsed = now - startTime;\n    const progress = Math.min(elapsed / duration, 1);\n    // ease-out cubic\n    const ease = 1 - Math.pow(1 - progress, 3);\n    displayPercent.value = Math.round(start + (target - start) * ease);\n\n    if (progress < 1) {\n      rafId = requestAnimationFrame(step);\n    }\n  }\n\n  if (rafId) cancelAnimationFrame(rafId);\n  rafId = requestAnimationFrame(step);\n});\n</script>\n\n<template>\n  <div\n    :class=\"[styles.progress, props.class]\"\n    :data-complete=\"isComplete ? '' : undefined\"\n    role=\"progressbar\"\n    :aria-label=\"label ?? 'Progress'\"\n    :aria-valuemin=\"0\"\n    :aria-valuemax=\"safeMax\"\n    :aria-valuenow=\"safeValue\"\n    :aria-valuetext=\"`${percentage}%`\"\n  >\n    <div v-if=\"label || showValue\" :class=\"styles.meta\">\n      <span v-if=\"label\" :class=\"styles.label\">\n        <AnimatePresence mode=\"popLayout\" :initial=\"false\">\n          <motion.span\n            :key=\"label\"\n            :class=\"styles.line\"\n            :initial=\"prefersReduced ? { opacity: 0 } : { opacity: 0, y: '0.3em', filter: `blur(${motionTokens.blur.soft}px)` }\"\n            :animate=\"{ opacity: 1, y: '0em', filter: 'blur(0px)' }\"\n            :exit=\"prefersReduced ? { opacity: 0 } : { opacity: 0, y: '-0.3em', filter: `blur(${motionTokens.blur.subtle}px)` }\"\n            :transition=\"{\n              duration: prefersReduced ? 0 : motionTokens.duration.standard,\n              ease: [...motionTokens.ease.enter],\n            }\"\n          >\n            {{ label }}\n          </motion.span>\n        </AnimatePresence>\n      </span>\n      <span v-else />\n\n      <span v-if=\"showValue\" :class=\"styles.value\">\n        <AnimatePresence :initial=\"false\">\n          <motion.span\n            v-if=\"isComplete\"\n            key=\"done\"\n            :class=\"styles.done\"\n            :initial=\"prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: `blur(${motionTokens.blur.subtle}px)` }\"\n            :animate=\"{ opacity: 1, scale: 1, filter: 'blur(0px)' }\"\n            :exit=\"{ opacity: 0, scale: 0.6 }\"\n            :transition=\"\n              prefersReduced\n                ? { duration: 0 }\n                : { ...motionTokens.spring.snappy, delay: 0.15 }\n            \"\n          >\n            <Check :size=\"14\" :stroke-width=\"2\" aria-hidden=\"true\" />\n          </motion.span>\n        </AnimatePresence>\n        <span :class=\"styles.count\">{{ displayPercent }}%</span>\n      </span>\n    </div>\n\n    <div :class=\"styles.track\">\n      <motion.span\n        :class=\"styles.fill\"\n        :animate=\"{ x: `${percentage - 100}%` }\"\n        :transition=\"\n          prefersReduced ? { duration: 0 } : motionTokens.spring.smooth\n        \"\n      />\n    </div>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/progress/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/progress/index.ts",
+      "content": "export { default as Progress } from \"./Progress.vue\";\nexport * from \"./Progress.vue\";\n"
+    },
+    {
+      "path": "registry/components/progress/progress.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/progress/progress.module.css",
+      "content": ".progress { width: 100%; color: var(--text-secondary); font-size: var(--text-sm); } .meta { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 8px; line-height: var(--leading-body); } .label { position: relative; min-width: 0; } .line { display: block; } .value { display: inline-flex; flex: none; align-items: center; gap: 4px; color: var(--text-muted); font-variant-numeric: tabular-nums; } .count { display: inline-grid; justify-items: end; } /* A hidden \"100%\" row reserves the widest count, so the check never shifts as the number gains a digit. */ .count::before { content: \"100%\"; height: 0; overflow: hidden; visibility: hidden; } .done { display: grid; place-items: center; color: var(--success); } .track { height: 7px; overflow: hidden; border: 1px solid var(--border); border-radius: 99px; background: var(--surface-muted); } .fill { display: block; width: 100%; height: 100%; border-radius: inherit; background: var(--accent); transition: background-color var(--duration-standard) var(--ease-standard); } .progress[data-complete] .fill { background: var(--success); transition-delay: 200ms; } @media (prefers-reduced-motion: reduce) { .fill, .progress[data-complete] .fill { transition: none; } }\n"
+    }
+  ]
+}

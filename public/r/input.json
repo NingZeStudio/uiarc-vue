@@ -1,0 +1,37 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "description": "平静物理微动效组件：Input",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/input/Input.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/input/Input.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { X } from \"lucide-vue-next\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./input.module.css\";\n\nexport interface InputProps {\n  modelValue?: string | number;\n  label?: string;\n  placeholder?: string;\n  description?: string;\n  error?: string;\n  disabled?: boolean;\n  clearable?: boolean;\n  type?: string;\n}\n\nconst props = withDefaults(defineProps<InputProps>(), {\n  modelValue: \"\",\n  type: \"text\",\n  disabled: false,\n  clearable: false,\n});\n\nconst emit = defineEmits<{\n  (e: \"update:modelValue\", val: string): void;\n  (e: \"clear\"): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n\nconst currentValue = computed({\n  get: () => String(props.modelValue ?? \"\"),\n  set: (val: string) => emit(\"update:modelValue\", val),\n});\n\nconst handleClear = () => {\n  currentValue.value = \"\";\n  emit(\"clear\");\n};\n\nconst messageVariants = {\n  enter: {\n    opacity: 0,\n    y: \"0.3em\",\n    filter: `blur(${motionTokens.blur.soft}px)`,\n  },\n  center: {\n    opacity: 1,\n    y: \"0em\",\n    filter: \"blur(0px)\",\n    transition: {\n      duration: motionTokens.duration.fast,\n      ease: [...motionTokens.ease.enter],\n    },\n  },\n  exit: {\n    opacity: 0,\n    y: \"-0.2em\",\n    filter: `blur(${motionTokens.blur.subtle}px)`,\n    transition: {\n      duration: motionTokens.duration.instant,\n    },\n  },\n};\n</script>\n\n<template>\n  <div :class=\"styles.field\">\n    <label v-if=\"label\" :class=\"styles.label\">{{ label }}</label>\n\n    <div :class=\"styles.inputWrapper\">\n      <span v-if=\"$slots.prefix\" :class=\"styles.prefix\">\n        <slot name=\"prefix\" />\n      </span>\n\n      <input\n        v-model=\"currentValue\"\n        :type=\"type\"\n        :class=\"[\n          styles.input,\n          $slots.prefix && styles.hasPrefix,\n          ($slots.suffix || (clearable && currentValue)) && styles.hasSuffix,\n        ]\"\n        :placeholder=\"placeholder\"\n        :disabled=\"disabled\"\n        :data-invalid=\"!!error || undefined\"\n      />\n\n      <!-- 一键清空微动效按钮 -->\n      <AnimatePresence>\n        <motion.button\n          v-if=\"clearable && currentValue && !disabled\"\n          type=\"button\"\n          :class=\"styles.clearButton\"\n          aria-label=\"Clear input\"\n          :initial=\"{ opacity: 0, scale: 0.7 }\"\n          :animate=\"{ opacity: 1, scale: 1 }\"\n          :exit=\"{ opacity: 0, scale: 0.7 }\"\n          :transition=\"{ duration: motionTokens.duration.instant }\"\n          @click=\"handleClear\"\n        >\n          <X :size=\"12\" />\n        </motion.button>\n      </AnimatePresence>\n\n      <span v-if=\"$slots.suffix && !(clearable && currentValue)\" :class=\"styles.suffix\">\n        <slot name=\"suffix\" />\n      </span>\n    </div>\n\n    <!-- 描述与错误提示微动效行 -->\n    <div v-if=\"error || description\" :class=\"styles.messageRow\">\n      <AnimatePresence mode=\"popLayout\" :initial=\"false\">\n        <motion.span\n          v-if=\"error\"\n          key=\"error\"\n          :class=\"styles.error\"\n          :variants=\"prefersReduced ? undefined : messageVariants\"\n          initial=\"enter\"\n          animate=\"center\"\n          exit=\"exit\"\n        >\n          {{ error }}\n        </motion.span>\n        <motion.span\n          v-else-if=\"description\"\n          key=\"desc\"\n          :class=\"styles.description\"\n          :variants=\"prefersReduced ? undefined : messageVariants\"\n          initial=\"enter\"\n          animate=\"center\"\n          exit=\"exit\"\n        >\n          {{ description }}\n        </motion.span>\n      </AnimatePresence>\n    </div>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/input/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/input/index.ts",
+      "content": "export { default as Input } from \"./Input.vue\";\nexport type { InputProps } from \"./Input.vue\";\n"
+    },
+    {
+      "path": "registry/components/input/input.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/input/input.module.css",
+      "content": ".field {\n  display: grid;\n  min-width: 0;\n  width: 100%;\n}\n\n.label {\n  margin-bottom: var(--space-2);\n  color: var(--foreground);\n  font-size: var(--text-sm);\n  font-weight: 500;\n  line-height: var(--leading-body);\n}\n\n.inputWrapper {\n  position: relative;\n  display: flex;\n  align-items: center;\n  width: 100%;\n}\n\n.input {\n  width: 100%;\n  min-height: var(--control-height-md);\n  padding: 0 var(--space-3);\n  border: 1px solid var(--border);\n  border-radius: var(--radius-control);\n  background: var(--surface);\n  color: var(--foreground);\n  font: inherit;\n  font-size: var(--text-sm);\n  line-height: var(--leading-body);\n  outline: none;\n  transition:\n    border-color var(--duration-fast) var(--ease-standard),\n    background-color var(--duration-fast) var(--ease-standard);\n}\n\n.input::placeholder {\n  color: var(--text-muted);\n}\n\n.input:focus {\n  border-color: var(--border-strong);\n}\n\n.input[data-invalid=\"true\"] {\n  border-color: var(--danger);\n}\n\n.input:disabled {\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n\n.prefix,\n.suffix {\n  position: absolute;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  color: var(--text-muted);\n  pointer-events: none;\n}\n\n.prefix {\n  left: var(--space-3);\n}\n\n.suffix {\n  right: var(--space-3);\n}\n\n.hasPrefix {\n  padding-left: calc(var(--space-3) + 20px);\n}\n\n.hasSuffix {\n  padding-right: calc(var(--space-3) + 24px);\n}\n\n.clearButton {\n  position: absolute;\n  right: var(--space-2);\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 22px;\n  height: 22px;\n  border: 0;\n  border-radius: 50%;\n  background: var(--surface-muted);\n  color: var(--text-secondary);\n  cursor: pointer;\n  transition: background-color var(--duration-fast) var(--ease-standard);\n}\n\n.clearButton:hover {\n  background: var(--border);\n  color: var(--foreground);\n}\n\n.messageRow {\n  margin-top: var(--space-1);\n  min-height: 1.25em;\n  font-size: var(--text-xs);\n  line-height: var(--leading-body);\n}\n\n.description {\n  color: var(--text-muted);\n}\n\n.error {\n  color: var(--danger);\n  font-weight: 500;\n}\n"
+    }
+  ]
+}

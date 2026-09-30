@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "otp-input",
+  "type": "registry:ui",
+  "title": "Otp Input",
+  "description": "平静物理微动效组件：Otp Input",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/otp-input/OtpInput.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/otp-input/OtpInput.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./otp-input.module.css\";\n\n\n\ninterface OtpInputProps {\n  length?: number;\n  value?: string;\n  onChange?: (value: string) => void;\n  label: string;\n  description?: string;\n  error?: string;\n  autoFocus?: boolean;\n  disabled?: boolean;\n  inputMode?: \"numeric\" | \"text\";\n  className?: string;\n}\n\nconst props = withDefaults(defineProps<OtpInputProps>(), {});\nconst emit = defineEmits<{\n  (e: \"change\", val: any): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n</script>\n\n<template>\n  <div :class=\"[styles?.root || styles?.container || styles?.otp_input || '']\">\n    <slot />\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/otp-input/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/otp-input/index.ts",
+      "content": "export { default as OtpInput } from \"./OtpInput.vue\";\nexport * from \"./OtpInput.vue\";\n"
+    },
+    {
+      "path": "registry/components/otp-input/otp-input.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/otp-input/otp-input.module.css",
+      "content": "/* No row gap: grid tracks clamp a negative margin at zero, so a closed message row would still pay the gap. Each row carries its own space instead. */\n.field { display: grid; min-width: 0; }\n.label { margin-bottom: 8px; color: var(--foreground); font-size: var(--text-sm); font-weight: 500; line-height: var(--leading-body); }\n.inputs { position: relative; display: flex; width: fit-content; max-width: 100%; gap: 7px; }\n.slot { position: relative; display: grid; width: 42px; height: 48px; min-width: 0; flex: 0 1 42px; }\n/* The native text is transparent (caret stays visible); .glyph draws the digit so it can rise in. */\n.input { width: 100%; height: 100%; min-width: 0; border: 1px solid var(--border); border-radius: var(--radius-control); background: var(--surface); color: transparent; caret-color: var(--accent); font: inherit; font-size: var(--text-lg); font-variant-numeric: tabular-nums; text-align: center; outline: none; transition: border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard); }\n@media (hover: hover) and (pointer: fine) { .input:hover:not(:disabled, [data-filled=\"true\"], [aria-invalid=\"true\"]) { border-color: var(--border-strong); background: var(--surface-muted); } }\n.input[data-filled=\"true\"] { border-color: var(--accent); background: var(--accent-subtle); }\n.input:focus-visible { outline: none; }\n.input[aria-invalid=\"true\"] { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 7%, var(--surface)); }\n.input:disabled { cursor: not-allowed; opacity: .48; background: var(--surface-muted); }\n.glyph { position: absolute; inset: 0; display: grid; place-items: center; color: var(--foreground); font-size: var(--text-lg); font-variant-numeric: tabular-nums; pointer-events: none; }\n.input:disabled ~ .glyph { opacity: .48; }\n/* One ring per field. It glides to the focused slot and morphs to the danger color with the error state. */\n.ring { position: absolute; top: 0; left: 0; height: 100%; z-index: 2; border: 1px solid var(--accent-strong); border-radius: var(--radius-control); box-shadow: 0 0 0 3px var(--focus-ring); pointer-events: none; transition: border-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard); }\n.inputs[data-invalid=\"true\"] .ring { border-color: var(--danger); box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 28%, transparent); }\n/* The row's space is padding inside the clipped slot, so the height animates from a true zero. */\n.messageSlot { display: block; overflow: hidden; }\n.description, .error { display: block; padding-top: 8px; font-size: var(--text-xs); line-height: var(--leading-body); }\n.description { color: var(--text-muted); }.error { color: var(--danger); }\n/* Words are measured against this box when they pop out to leave, so it must be the positioned parent. */\n.words { position: relative; display: block; }\n.word { display: inline-block; white-space: pre; }\n.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }\n@media (max-width: 360px) { .inputs { gap: 5px; }.slot { height: 44px; } }\n@media (forced-colors: active) { .ring { display: none; } .input:focus-visible { outline: 2px solid CanvasText; outline-offset: 2px; } .input { color: CanvasText; } .glyph { display: none; } }\n@media (prefers-reduced-motion: reduce) { .input, .ring { transition: none; } }\n"
+    }
+  ]
+}

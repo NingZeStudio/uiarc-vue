@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "segmented-control",
+  "type": "registry:ui",
+  "title": "Segmented Control",
+  "description": "平静物理微动效组件：Segmented Control",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/segmented-control/SegmentedControl.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/segmented-control/SegmentedControl.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from \"vue\";\nimport { motion } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./segmented-control.module.css\";\n\nexport interface Segment {\n  value: string;\n  label: string;\n  accessory?: any;\n  disabled?: boolean;\n}\n\nexport interface SegmentedControlProps {\n  modelValue?: string;\n  options: Segment[];\n  label?: string;\n  /** 全局唯一的 layoutId，用于区分多个分段组件 */\n  id?: string;\n}\n\nconst props = withDefaults(defineProps<SegmentedControlProps>(), {\n  modelValue: \"\",\n  label: \"Segmented Control\",\n  id: \"segment-control-thumb\",\n});\n\nconst emit = defineEmits<{\n  (e: \"update:modelValue\", val: string): void;\n  (e: \"change\", val: string): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\nconst trackRef = ref<HTMLDivElement | null>(null);\n\nconst selectOption = (opt: Segment) => {\n  if (opt.disabled) return;\n  emit(\"update:modelValue\", opt.value);\n  emit(\"change\", opt.value);\n};\n</script>\n\n<template>\n  <div :class=\"styles.root\" role=\"group\" :aria-label=\"label\">\n    <div ref=\"trackRef\" :class=\"styles.track\">\n      <button\n        v-for=\"opt in options\"\n        :key=\"opt.value\"\n        type=\"button\"\n        :class=\"styles.button\"\n        :data-selected=\"modelValue === opt.value || undefined\"\n        :aria-pressed=\"modelValue === opt.value\"\n        :disabled=\"opt.disabled\"\n        @click=\"selectOption(opt)\"\n      >\n        <!-- 核心平滑共享滑块 (FLIP 物理弹簧变形) -->\n        <motion.span\n          v-if=\"modelValue === opt.value\"\n          :class=\"styles.selection\"\n          :layout-id=\"id\"\n          :transition=\"\n            prefersReduced\n              ? { duration: 0 }\n              : {\n                  type: 'spring',\n                  stiffness: 480,\n                  damping: 36,\n                }\n          \"\n        />\n\n        <span :class=\"styles.label\">\n          <span>{{ opt.label }}</span>\n          <span v-if=\"opt.accessory\" :class=\"styles.accessory\">\n            {{ opt.accessory }}\n          </span>\n        </span>\n      </button>\n    </div>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/segmented-control/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/segmented-control/index.ts",
+      "content": "export { default as SegmentedControl } from \"./SegmentedControl.vue\";\nexport type { SegmentedControlProps, Segment } from \"./SegmentedControl.vue\";\n"
+    },
+    {
+      "path": "registry/components/segmented-control/segmented-control.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/segmented-control/segmented-control.module.css",
+      "content": ".root {\n  display: inline-flex;\n  min-width: 0;\n  max-width: 100%;\n  flex-shrink: 1;\n  border: 1px solid var(--border);\n  border-radius: var(--radius-control);\n  background: var(--surface-muted);\n  user-select: none;\n}\n\n.track {\n  --fade-start: 0px;\n  --fade-end: 0px;\n  isolation: isolate;\n  display: flex;\n  min-width: 0;\n  gap: 2px;\n  overflow-x: auto;\n  overscroll-behavior-x: contain;\n  padding: 3px;\n  border-radius: inherit;\n  scrollbar-width: none;\n}\n\n.track::-webkit-scrollbar {\n  display: none;\n}\n\n.button {\n  position: relative;\n  display: inline-flex;\n  min-height: calc(var(--control-height-sm) + 2px);\n  align-items: center;\n  justify-content: center;\n  gap: var(--space-2);\n  border: 0;\n  border-radius: calc(var(--radius-control) - 3px);\n  padding: 0 var(--space-3);\n  background: transparent;\n  color: var(--text-secondary);\n  font: inherit;\n  font-size: var(--text-xs);\n  font-weight: 500;\n  line-height: 1;\n  white-space: nowrap;\n  cursor: pointer;\n  outline: none;\n  transition: color var(--duration-fast) var(--ease-standard);\n}\n\n.button:hover:not(:disabled) {\n  color: var(--foreground);\n}\n\n.button[data-selected] {\n  color: var(--foreground);\n}\n\n.button:disabled {\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n\n.selection {\n  position: absolute;\n  inset: 0;\n  z-index: -1;\n  border-radius: inherit;\n  background: var(--surface);\n  box-shadow: var(--shadow-resting);\n}\n\n:root[data-theme=\"dark\"] .selection {\n  background: var(--surface-raised);\n  box-shadow: 0 0 0 1px var(--border), 0 1px 3px oklch(0% 0 0 / 0.4);\n}\n\n.label {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n}\n\n.accessory {\n  display: inline-flex;\n  align-items: center;\n  font-size: 0.85em;\n  opacity: 0.85;\n}\n"
+    }
+  ]
+}

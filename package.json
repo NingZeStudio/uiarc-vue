@@ -1,0 +1,56 @@
+{
+  "name": "uiarc-vue",
+  "version": "1.0.0",
+  "description": "Arc UI ported to Vue 3 with calm motion and physical aesthetics, compatible with shadcn-vue",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "build:registry": "tsx scripts/build-registry.ts",
+    "lint": "eslint ."
+  },
+  "files": [
+    "registry",
+    "public/r",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@vueuse/core": "^12.7.0",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "^0.475.0",
+    "motion-v": "^1.1.0",
+    "reka-ui": "^2.0.1",
+    "tailwind-merge": "^3.0.1",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "vue-tsc": "^2.2.0"
+  },
+  "keywords": [
+    "vue",
+    "shadcn",
+    "shadcn-vue",
+    "motion-v",
+    "motion",
+    "arc-ui",
+    "components"
+  ],
+  "author": "Antigravity & NingZeStudio",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NingZeStudio/uiarc-vue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NingZeStudio/uiarc-vue/issues"
+  },
+  "homepage": "https://github.com/NingZeStudio/uiarc-vue#readme"
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "radio-cards",
+  "type": "registry:ui",
+  "title": "Radio Cards",
+  "description": "平静物理微动效组件：Radio Cards",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/radio-cards/RadioCards.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/radio-cards/RadioCards.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./radio-cards.module.css\";\n\n\n\ninterface RadioCardsProps extends Omit<HTMLAttributes<HTMLDivElement>, \"onChange\" | \"defaultValue\"> {\n  options: RadioCardOption[];\n  value?: string | null;\n  defaultValue?: string | null;\n  onValueChange?: (value: string) => void;\n  /** \"grid\" places cards in responsive columns; \"list\" stacks full width rows. */\n  layout?: \"grid\" | \"list\";\n  /** Narrowest a grid column may get before the grid drops a column, in px. */\n  minColumnWidth?: number;\n  /** Form field name. Renders a hidden input with the selected value. */\n  name?: string;\n  required?: boolean;\n  disabled?: boolean;\n}\n\nconst props = withDefaults(defineProps<RadioCardsProps>(), {});\nconst emit = defineEmits<{\n  (e: \"change\", val: any): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n</script>\n\n<template>\n  <div :class=\"[styles?.root || styles?.container || styles?.radio_cards || '']\">\n    <slot />\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/radio-cards/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/radio-cards/index.ts",
+      "content": "export { default as RadioCards } from \"./RadioCards.vue\";\nexport * from \"./RadioCards.vue\";\n"
+    },
+    {
+      "path": "registry/components/radio-cards/radio-cards.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/radio-cards/radio-cards.module.css",
+      "content": ".root {\n  position: relative;\n  display: grid;\n  gap: 10px;\n  color: var(--foreground);\n  font-family: var(--font-body);\n  font-size: var(--text-sm);\n  letter-spacing: var(--tracking-body);\n  line-height: var(--leading-body);\n}\n.root *, .root *::before, .root *::after { box-sizing: border-box; }\n.root[data-layout=\"grid\"] { grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--min-column, 180px)), 1fr)); }\n.root[data-layout=\"list\"] { grid-template-columns: minmax(0, 1fr); gap: 8px; }\n\n/* The one moving part: a ring that springs from card to card. It sits over the card border so the card itself never changes size. */\n.ring {\n  position: absolute;\n  z-index: 1;\n  top: 0;\n  left: 0;\n  border: 1.5px solid var(--control-on);\n  border-radius: 20px;\n  pointer-events: none;\n}\n\n.card {\n  position: relative;\n  display: grid;\n  min-width: 0;\n  align-items: start;\n  gap: 4px 12px;\n  padding: 14px 16px;\n  border: 1px solid var(--border);\n  border-radius: 20px;\n  background: var(--surface);\n  cursor: pointer;\n  user-select: none;\n  -webkit-tap-highlight-color: transparent;\n  transition: background-color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);\n}\n.root[data-layout=\"grid\"] .card { grid-template-areas: \"body indicator\" \"meta meta\"; grid-template-columns: minmax(0, 1fr) auto; align-content: start; }\n.root[data-layout=\"list\"] .card { grid-template-areas: \"indicator body meta\"; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; padding: 13px 16px 13px 14px; }\n.card[data-checked] { background: color-mix(in oklch, var(--control-on) 4%, var(--surface)); }\n.card[aria-disabled=\"true\"] { background: var(--surface-muted); cursor: not-allowed; }\n.card[aria-disabled=\"true\"] :is(.label, .meta) { color: var(--text-muted); }\n\n.indicator {\n  display: grid;\n  width: 18px;\n  height: 18px;\n  flex: none;\n  place-items: center;\n  grid-area: indicator;\n  border: 1.5px solid var(--border-strong);\n  border-radius: 50%;\n  transition: border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard);\n}\n.root[data-layout=\"grid\"] .indicator { margin-top: 1px; }\n.card[data-checked] .indicator { border-color: var(--control-on); background: var(--control-on); }\n.indicatorDot { width: 6px; height: 6px; border-radius: 50%; background: var(--control-glyph); }\n.card[aria-disabled=\"true\"] .indicator { border-color: var(--border); }\n\n.body { display: grid; min-width: 0; gap: 2px; grid-area: body; }\n.label { display: flex; min-width: 0; align-items: center; gap: 8px; font-weight: 500; }\n.labelText { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n.icon { display: grid; width: 18px; height: 18px; flex: none; place-items: center; color: var(--text-secondary); }\n.icon > svg { width: 18px; height: 18px; }\n.card[data-checked] .icon { color: var(--foreground); }\n.description { color: var(--text-secondary); font-size: var(--text-xs); line-height: 1.45; text-wrap: pretty; }\n\n.meta { grid-area: meta; color: var(--foreground); font-variant-numeric: tabular-nums; white-space: nowrap; }\n.root[data-layout=\"grid\"] .meta { margin-top: 10px; font-size: var(--text-lg); }\n.root[data-layout=\"list\"] .meta { font-weight: 500; }\n\n@media (hover: hover) and (pointer: fine) {\n  .card:not([data-checked]):not([aria-disabled=\"true\"]):hover { border-color: var(--border-strong); }\n}\n.card:not([data-checked]):not([aria-disabled=\"true\"]):active { background: var(--surface-muted); }\n.card:focus-visible { outline: 2px solid var(--control-on); outline-offset: 2px; }\n.card:focus-visible:not([data-checked]) { border-color: var(--border-strong); background: var(--surface-muted); }\n\n@media (prefers-reduced-motion: reduce) {\n  .card, .indicator { transition: none; }\n}\n"
+    }
+  ]
+}

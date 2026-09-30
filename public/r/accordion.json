@@ -1,0 +1,37 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "accordion",
+  "type": "registry:ui",
+  "title": "Accordion",
+  "description": "平静物理微动效组件：Accordion",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/accordion/Accordion.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/accordion/Accordion.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { ChevronDown } from \"lucide-vue-next\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./accordion.module.css\";\n\nexport interface AccordionItem {\n  id: string | number;\n  title: string;\n  content?: string;\n  disabled?: boolean;\n}\n\nexport interface AccordionProps {\n  items: AccordionItem[];\n  /** 默认展开项的 id */\n  defaultOpen?: (string | number)[] | string | number;\n  /** 是否允许同时展开多项，默认 false */\n  multiple?: boolean;\n}\n\nconst props = withDefaults(defineProps<AccordionProps>(), {\n  multiple: false,\n});\n\nconst prefersReduced = useReducedMotion();\n\nconst getInitialOpen = (): Set<string | number> => {\n  if (props.defaultOpen === undefined) return new Set();\n  if (Array.isArray(props.defaultOpen)) return new Set(props.defaultOpen);\n  return new Set([props.defaultOpen]);\n};\n\nconst openIds = ref<Set<string | number>>(getInitialOpen());\n\nconst toggle = (id: string | number, disabled?: boolean) => {\n  if (disabled) return;\n  const isOpened = openIds.value.has(id);\n  if (props.multiple) {\n    if (isOpened) openIds.value.delete(id);\n    else openIds.value.add(id);\n  } else {\n    openIds.value.clear();\n    if (!isOpened) openIds.value.add(id);\n  }\n};\n\nconst isOpen = (id: string | number) => openIds.value.has(id);\n</script>\n\n<template>\n  <div :class=\"styles.accordion\">\n    <div\n      v-for=\"item in items\"\n      :key=\"item.id\"\n      :class=\"styles.item\"\n    >\n      <h3 :class=\"styles.header\">\n        <button\n          type=\"button\"\n          :class=\"styles.trigger\"\n          :aria-expanded=\"isOpen(item.id)\"\n          :disabled=\"item.disabled\"\n          @click=\"toggle(item.id, item.disabled)\"\n        >\n          <span>{{ item.title }}</span>\n          <span\n            :class=\"styles.icon\"\n            :style=\"{\n              transform: isOpen(item.id) ? 'rotate(180deg)' : 'rotate(0deg)',\n            }\"\n          >\n            <ChevronDown :size=\"16\" />\n          </span>\n        </button>\n      </h3>\n\n      <AnimatePresence :initial=\"false\">\n        <motion.div\n          v-if=\"isOpen(item.id)\"\n          :class=\"styles.panel\"\n          :initial=\"prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }\"\n          :animate=\"{ height: 'auto', opacity: 1 }\"\n          :exit=\"prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }\"\n          :transition=\"{\n            height: { duration: 0.28, ease: [...motionTokens.ease.standard] },\n            opacity: { duration: motionTokens.duration.fast },\n          }\"\n        >\n          <motion.div\n            :class=\"styles.content\"\n            :initial=\"prefersReduced ? {} : { y: -6, filter: `blur(${motionTokens.blur.subtle}px)` }\"\n            :animate=\"{ y: 0, filter: 'blur(0px)' }\"\n            :transition=\"{ duration: 0.24, ease: [...motionTokens.ease.enter] }\"\n          >\n            <slot :name=\"`item-${item.id}`\" :item=\"item\">\n              {{ item.content }}\n            </slot>\n          </motion.div>\n        </motion.div>\n      </AnimatePresence>\n    </div>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/accordion/accordion.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/accordion/accordion.module.css",
+      "content": ".accordion {\n  width: 100%;\n  border-top: 1px solid var(--border);\n}\n\n.item {\n  border-bottom: 1px solid var(--border);\n}\n\n.header {\n  margin: 0;\n}\n\n.trigger {\n  display: flex;\n  width: 100%;\n  min-height: var(--control-height-lg);\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--space-4);\n  padding: var(--space-3) 0;\n  border: 0;\n  background: transparent;\n  color: var(--foreground);\n  font: inherit;\n  font-size: var(--text-sm);\n  font-weight: 500;\n  line-height: var(--leading-body);\n  text-align: left;\n  cursor: pointer;\n  -webkit-tap-highlight-color: transparent;\n  transition: color var(--duration-fast) var(--ease-standard);\n}\n\n.trigger:hover {\n  color: var(--text-secondary);\n}\n\n.icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  color: var(--text-muted);\n  flex: none;\n  transition:\n    transform var(--duration-standard) var(--ease-standard),\n    color var(--duration-fast) var(--ease-standard);\n}\n\n.panel {\n  overflow: hidden;\n}\n\n.content {\n  padding-bottom: var(--space-4);\n  color: var(--text-secondary);\n  font-size: var(--text-sm);\n  line-height: var(--leading-body);\n}\n"
+    },
+    {
+      "path": "registry/components/accordion/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/accordion/index.ts",
+      "content": "export { default as Accordion } from \"./Accordion.vue\";\nexport type { AccordionProps, AccordionItem } from \"./Accordion.vue\";\n"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "popover",
+  "type": "registry:ui",
+  "title": "Popover",
+  "description": "平静物理微动效组件：Popover",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/popover/Popover.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/popover/Popover.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, onMounted, onUnmounted } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./popover.module.css\";\n\nexport interface PopoverProps {\n  align?: \"start\" | \"center\" | \"end\";\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<PopoverProps>(), {\n  align: \"start\",\n});\n\nconst prefersReduced = useReducedMotion();\nconst isOpen = ref(false);\nconst containerRef = ref<HTMLDivElement | null>(null);\n\nfunction toggle() {\n  isOpen.value = !isOpen.value;\n}\n\nfunction close() {\n  isOpen.value = false;\n}\n\nfunction handleOutsideClick(e: MouseEvent) {\n  if (containerRef.value && !containerRef.value.contains(e.target as Node)) {\n    close();\n  }\n}\n\nonMounted(() => {\n  document.addEventListener(\"click\", handleOutsideClick);\n});\n\nonUnmounted(() => {\n  document.removeEventListener(\"click\", handleOutsideClick);\n});\n</script>\n\n<template>\n  <div ref=\"containerRef\" :class=\"[styles.container, props.class]\">\n    <div :class=\"styles.anchor\" @click=\"toggle\">\n      <slot name=\"trigger\" :open=\"isOpen\" />\n    </div>\n\n    <AnimatePresence>\n      <motion.div\n        v-if=\"isOpen\"\n        :class=\"[styles.content, styles[align]]\"\n        :initial=\"\n          prefersReduced\n            ? { opacity: 0 }\n            : { opacity: 0, scale: 0.96, y: -4, filter: `blur(${motionTokens.blur.subtle}px)` }\n        \"\n        :animate=\"{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }\"\n        :exit=\"\n          prefersReduced\n            ? { opacity: 0 }\n            : { opacity: 0, scale: 0.96, y: -4, filter: `blur(${motionTokens.blur.subtle}px)` }\n        \"\n        :transition=\"\n          prefersReduced ? { duration: 0.1 } : motionTokens.spring.snappy\n        \"\n      >\n        <slot :close=\"close\" />\n      </motion.div>\n    </AnimatePresence>\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/popover/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/popover/index.ts",
+      "content": "export { default as Popover } from \"./Popover.vue\";\nexport * from \"./Popover.vue\";\n"
+    },
+    {
+      "path": "registry/components/popover/popover.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/popover/popover.module.css",
+      "content": "/* Press feedback on the anchor stays in color. Radix measures the trigger when the panel opens, so a scaled trigger would move the panel. */\n.anchor:active:not(:disabled) { transform: none; }\n.content {\n  --popover-x: 0px;\n  --popover-y: -5px;\n  z-index: 80;\n  min-width: 12rem;\n  max-width: min(22rem, calc(100vw - 20px));\n  padding: 1rem;\n  border: 1px solid var(--border);\n  border-radius: var(--radius-panel);\n  background: var(--surface-raised);\n  color: var(--foreground);\n  box-shadow: var(--shadow-floating);\n  transform-origin: var(--radix-popover-content-transform-origin);\n  transition: opacity var(--duration-fast) var(--ease-enter), transform var(--duration-spring) var(--ease-spring);\n}\n/* The panel starts a few pixels toward its trigger and settles on a spring; it leaves faster than it arrives.\n   Transitions instead of keyframes, so a close that interrupts the open, or a reopen during the close, reverses from where the panel is. */\n.content[data-side=\"top\"] { --popover-y: 5px; }\n.content[data-side=\"left\"] { --popover-x: 5px; --popover-y: 0px; }\n.content[data-side=\"right\"] { --popover-x: -5px; --popover-y: 0px; }\n@starting-style {\n  .content[data-state=\"open\"] { opacity: 0; transform: translate(var(--popover-x), var(--popover-y)) scale(.97); }\n}\n/* Radix unmounts when the exit animation ends, so a no-op keyframe times the exit while the transition does the visual work. */\n.content[data-state=\"closed\"] { opacity: 0; transform: translate(calc(var(--popover-x) * .5), calc(var(--popover-y) * .5)) scale(.98); transition: opacity 140ms var(--ease-standard), transform 140ms var(--ease-standard); animation: popover-exit 140ms linear both; pointer-events: none; }\n.content:focus { outline: none; }\n.content:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }\n@keyframes popover-exit { to { --popover-exit: 1; } }\n@media (prefers-reduced-motion: reduce) {\n  .content, .content[data-state=\"closed\"] { transform: none; transition: opacity var(--duration-instant) linear; }\n}\n"
+    }
+  ]
+}

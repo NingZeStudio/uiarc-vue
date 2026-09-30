@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "tree-view",
+  "type": "registry:ui",
+  "title": "Tree View",
+  "description": "平静物理微动效组件：Tree View",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/tree-view/TreeView.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/tree-view/TreeView.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./tree-view.module.css\";\n\n\n\ninterface TreeViewProps {\n  nodes: TreeNode[];\n  defaultExpandedIds?: string[];\n  expandedIds?: string[];\n  onExpandedChange?: (expandedIds: string[]) => void;\n  onSelect?: (node: TreeNode) => void;\n  \"aria-label\"?: string;\n}\n\nconst props = withDefaults(defineProps<TreeViewProps>(), {});\nconst emit = defineEmits<{\n  (e: \"change\", val: any): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n</script>\n\n<template>\n  <div :class=\"[styles?.root || styles?.container || styles?.tree_view || '']\">\n    <slot />\n  </div>\n</template>\n"
+    },
+    {
+      "path": "registry/components/tree-view/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/tree-view/index.ts",
+      "content": "export { default as TreeView } from \"./TreeView.vue\";\nexport * from \"./TreeView.vue\";\n"
+    },
+    {
+      "path": "registry/components/tree-view/tree-view.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/tree-view/tree-view.module.css",
+      "content": ".tree { display: block; width: 100%; min-width: 0; box-sizing: border-box; padding: 6px 8px 8px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); color: var(--foreground); overflow: hidden; }\n/* Rows clip only while their height animates (Motion sets overflow), so the selection can glide between them unclipped. */\n.row { position: relative; display: flow-root; min-width: 0; height: 38px; }\n.item { position: relative; display: flex; width: 100%; min-width: 0; height: 36px; margin-top: 2px; align-items: center; gap: 8px; padding: 0 10px; padding-left: calc(10px + (var(--tree-depth) - 1) * 18px); border: 0; border-radius: 10px; background: transparent; color: var(--text-secondary); font: inherit; font-size: var(--text-sm); line-height: 1; text-align: left; cursor: pointer; outline: none; transition: color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard); }\n/* Selection changes color only; a heavier weight would reflow the label. */\n.item[aria-selected=\"true\"] { color: var(--foreground); }\n/* One ring drawn inside the row, so it clears the tree's clipped edge; the global button outline would add a second ring outside it. */\n.item:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }\n.selection { position: absolute; inset: 0; z-index: 0; border-radius: 10px; background: var(--surface-muted); }\n.branch { position: absolute; top: 4px; bottom: 4px; left: calc(18px + (var(--tree-depth) - 2) * 18px); z-index: 1; width: 1px; background: var(--border); transform-origin: top; pointer-events: none; }\n.disclosure, .icon, .label { position: relative; z-index: 1; }\n.disclosure { display: grid; width: 14px; height: 16px; flex: 0 0 14px; place-items: center; color: var(--text-muted); }\n.icon { display: grid; width: 16px; height: 16px; flex: 0 0 16px; place-items: center; color: var(--text-muted); transition: color var(--duration-fast) var(--ease-standard); }\n.folder { color: var(--text-secondary); }\n.item[aria-expanded=\"true\"] .folder, .item[aria-selected=\"true\"] .folder { color: var(--foreground); }\n.folderGlyph { position: absolute; inset: 0; display: grid; place-items: center; }\n.typescript { color: color-mix(in oklch, #3178c6 78%, var(--foreground)); }\n.stylesheet { color: color-mix(in oklch, #8b6ace 73%, var(--foreground)); }\n.markdown { color: color-mix(in oklch, #38896b 74%, var(--foreground)); }\n.json { color: color-mix(in oklch, #c48637 78%, var(--foreground)); }\n.label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }\n@media (hover: hover) and (pointer: fine) { .item:hover { background: var(--surface-muted); color: var(--foreground); } }\n@media (prefers-reduced-motion: reduce) { .item, .icon { transition: none; } }\n"
+    }
+  ]
+}

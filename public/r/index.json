@@ -1,0 +1,602 @@
+[
+  {
+    "name": "arc-foundation",
+    "title": "Arc Foundation",
+    "description": "Arc UI 设计 Token（OKLCH 色彩体系、低饱和度灰阶、语义化主题）与物理动效常量",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  },
+  {
+    "name": "accordion",
+    "title": "Accordion",
+    "description": "平静物理微动效组件：Accordion",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/accordion.json"
+  },
+  {
+    "name": "action-button",
+    "title": "Action Button",
+    "description": "平静物理微动效组件：Action Button",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/action-button.json"
+  },
+  {
+    "name": "activity-heatmap",
+    "title": "Activity Heatmap",
+    "description": "平静物理微动效组件：Activity Heatmap",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/activity-heatmap.json"
+  },
+  {
+    "name": "alert",
+    "title": "Alert",
+    "description": "平静物理微动效组件：Alert",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/alert.json"
+  },
+  {
+    "name": "animated-counter",
+    "title": "Animated Counter",
+    "description": "平静物理微动效组件：Animated Counter",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/animated-counter.json"
+  },
+  {
+    "name": "announcement-bar",
+    "title": "Announcement Bar",
+    "description": "平静物理微动效组件：Announcement Bar",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/announcement-bar.json"
+  },
+  {
+    "name": "avatar",
+    "title": "Avatar",
+    "description": "平静物理微动效组件：Avatar",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/avatar.json"
+  },
+  {
+    "name": "avatar-group",
+    "title": "Avatar Group",
+    "description": "平静物理微动效组件：Avatar Group",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/avatar-group.json"
+  },
+  {
+    "name": "badge",
+    "title": "Badge",
+    "description": "平静物理微动效组件：Badge",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/badge.json"
+  },
+  {
+    "name": "bar-chart",
+    "title": "Bar Chart",
+    "description": "平静物理微动效组件：Bar Chart",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/bar-chart.json"
+  },
+  {
+    "name": "billing-toggle",
+    "title": "Billing Toggle",
+    "description": "平静物理微动效组件：Billing Toggle",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/billing-toggle.json"
+  },
+  {
+    "name": "bottom-sheet",
+    "title": "Bottom Sheet",
+    "description": "平静物理微动效组件：Bottom Sheet",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/bottom-sheet.json"
+  },
+  {
+    "name": "breadcrumb",
+    "title": "Breadcrumb",
+    "description": "平静物理微动效组件：Breadcrumb",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/breadcrumb.json"
+  },
+  {
+    "name": "brush-chart",
+    "title": "Brush Chart",
+    "description": "平静物理微动效组件：Brush Chart",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/brush-chart.json"
+  },
+  {
+    "name": "button",
+    "title": "Button",
+    "description": "平静物理微动效组件：Button",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/button.json"
+  },
+  {
+    "name": "calendar",
+    "title": "Calendar",
+    "description": "平静物理微动效组件：Calendar",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/calendar.json"
+  },
+  {
+    "name": "card",
+    "title": "Card",
+    "description": "平静物理微动效组件：Card",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/card.json"
+  },
+  {
+    "name": "carousel",
+    "title": "Carousel",
+    "description": "平静物理微动效组件：Carousel",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/carousel.json"
+  },
+  {
+    "name": "chat-thread",
+    "title": "Chat Thread",
+    "description": "平静物理微动效组件：Chat Thread",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/chat-thread.json"
+  },
+  {
+    "name": "checkbox",
+    "title": "Checkbox",
+    "description": "平静物理微动效组件：Checkbox",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/checkbox.json"
+  },
+  {
+    "name": "chip-group",
+    "title": "Chip Group",
+    "description": "平静物理微动效组件：Chip Group",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/chip-group.json"
+  },
+  {
+    "name": "code-block",
+    "title": "Code Block",
+    "description": "平静物理微动效组件：Code Block",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/code-block.json"
+  },
+  {
+    "name": "color-picker",
+    "title": "Color Picker",
+    "description": "平静物理微动效组件：Color Picker",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/color-picker.json"
+  },
+  {
+    "name": "combobox",
+    "title": "Combobox",
+    "description": "平静物理微动效组件：Combobox",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/combobox.json"
+  },
+  {
+    "name": "command-palette",
+    "title": "Command Palette",
+    "description": "平静物理微动效组件：Command Palette",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/command-palette.json"
+  },
+  {
+    "name": "comment-thread",
+    "title": "Comment Thread",
+    "description": "平静物理微动效组件：Comment Thread",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/comment-thread.json"
+  },
+  {
+    "name": "confirm-morph",
+    "title": "Confirm Morph",
+    "description": "平静物理微动效组件：Confirm Morph",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/confirm-morph.json"
+  },
+  {
+    "name": "context-menu",
+    "title": "Context Menu",
+    "description": "平静物理微动效组件：Context Menu",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/context-menu.json"
+  },
+  {
+    "name": "copy-button",
+    "title": "Copy Button",
+    "description": "平静物理微动效组件：Copy Button",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/copy-button.json"
+  },
+  {
+    "name": "date-picker",
+    "title": "Date Picker",
+    "description": "平静物理微动效组件：Date Picker",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/date-picker.json"
+  },
+  {
+    "name": "date-range-picker",
+    "title": "Date Range Picker",
+    "description": "平静物理微动效组件：Date Range Picker",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/date-range-picker.json"
+  },
+  {
+    "name": "dialog",
+    "title": "Dialog",
+    "description": "平静物理微动效组件：Dialog",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/dialog.json"
+  },
+  {
+    "name": "donut-chart",
+    "title": "Donut Chart",
+    "description": "平静物理微动效组件：Donut Chart",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/donut-chart.json"
+  },
+  {
+    "name": "drawer",
+    "title": "Drawer",
+    "description": "平静物理微动效组件：Drawer",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/drawer.json"
+  },
+  {
+    "name": "dropdown-menu",
+    "title": "Dropdown Menu",
+    "description": "平静物理微动效组件：Dropdown Menu",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/dropdown-menu.json"
+  },
+  {
+    "name": "empty-state",
+    "title": "Empty State",
+    "description": "平静物理微动效组件：Empty State",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/empty-state.json"
+  },
+  {
+    "name": "expandable-card",
+    "title": "Expandable Card",
+    "description": "平静物理微动效组件：Expandable Card",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/expandable-card.json"
+  },
+  {
+    "name": "file-dropzone",
+    "title": "File Dropzone",
+    "description": "平静物理微动效组件：File Dropzone",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/file-dropzone.json"
+  },
+  {
+    "name": "file-upload",
+    "title": "File Upload",
+    "description": "平静物理微动效组件：File Upload",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/file-upload.json"
+  },
+  {
+    "name": "filter-toolbar",
+    "title": "Filter Toolbar",
+    "description": "平静物理微动效组件：Filter Toolbar",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/filter-toolbar.json"
+  },
+  {
+    "name": "gauge",
+    "title": "Gauge",
+    "description": "平静物理微动效组件：Gauge",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/gauge.json"
+  },
+  {
+    "name": "hold-to-confirm",
+    "title": "Hold To Confirm",
+    "description": "平静物理微动效组件：Hold To Confirm",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/hold-to-confirm.json"
+  },
+  {
+    "name": "hover-card",
+    "title": "Hover Card",
+    "description": "平静物理微动效组件：Hover Card",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/hover-card.json"
+  },
+  {
+    "name": "image-compare",
+    "title": "Image Compare",
+    "description": "平静物理微动效组件：Image Compare",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/image-compare.json"
+  },
+  {
+    "name": "in-view-title",
+    "title": "In View Title",
+    "description": "平静物理微动效组件：In View Title",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/in-view-title.json"
+  },
+  {
+    "name": "inline-edit",
+    "title": "Inline Edit",
+    "description": "平静物理微动效组件：Inline Edit",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/inline-edit.json"
+  },
+  {
+    "name": "input",
+    "title": "Input",
+    "description": "平静物理微动效组件：Input",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/input.json"
+  },
+  {
+    "name": "line-chart",
+    "title": "Line Chart",
+    "description": "平静物理微动效组件：Line Chart",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/line-chart.json"
+  },
+  {
+    "name": "mention-input",
+    "title": "Mention Input",
+    "description": "平静物理微动效组件：Mention Input",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/mention-input.json"
+  },
+  {
+    "name": "metric-card",
+    "title": "Metric Card",
+    "description": "平静物理微动效组件：Metric Card",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/metric-card.json"
+  },
+  {
+    "name": "multi-select",
+    "title": "Multi Select",
+    "description": "平静物理微动效组件：Multi Select",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/multi-select.json"
+  },
+  {
+    "name": "notification-center",
+    "title": "Notification Center",
+    "description": "平静物理微动效组件：Notification Center",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/notification-center.json"
+  },
+  {
+    "name": "number-field",
+    "title": "Number Field",
+    "description": "平静物理微动效组件：Number Field",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/number-field.json"
+  },
+  {
+    "name": "otp-input",
+    "title": "Otp Input",
+    "description": "平静物理微动效组件：Otp Input",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/otp-input.json"
+  },
+  {
+    "name": "pagination",
+    "title": "Pagination",
+    "description": "平静物理微动效组件：Pagination",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/pagination.json"
+  },
+  {
+    "name": "password-field",
+    "title": "Password Field",
+    "description": "平静物理微动效组件：Password Field",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/password-field.json"
+  },
+  {
+    "name": "password-strength",
+    "title": "Password Strength",
+    "description": "平静物理微动效组件：Password Strength",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/password-strength.json"
+  },
+  {
+    "name": "phone-input",
+    "title": "Phone Input",
+    "description": "平静物理微动效组件：Phone Input",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/phone-input.json"
+  },
+  {
+    "name": "popover",
+    "title": "Popover",
+    "description": "平静物理微动效组件：Popover",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/popover.json"
+  },
+  {
+    "name": "progress",
+    "title": "Progress",
+    "description": "平静物理微动效组件：Progress",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/progress.json"
+  },
+  {
+    "name": "radio-cards",
+    "title": "Radio Cards",
+    "description": "平静物理微动效组件：Radio Cards",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/radio-cards.json"
+  },
+  {
+    "name": "radio-group",
+    "title": "Radio Group",
+    "description": "平静物理微动效组件：Radio Group",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/radio-group.json"
+  },
+  {
+    "name": "resizable-panels",
+    "title": "Resizable Panels",
+    "description": "平静物理微动效组件：Resizable Panels",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/resizable-panels.json"
+  },
+  {
+    "name": "rich-text-editor",
+    "title": "Rich Text Editor",
+    "description": "平静物理微动效组件：Rich Text Editor",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/rich-text-editor.json"
+  },
+  {
+    "name": "ridgeline",
+    "title": "Ridgeline",
+    "description": "平静物理微动效组件：Ridgeline",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/ridgeline.json"
+  },
+  {
+    "name": "scroll-area",
+    "title": "Scroll Area",
+    "description": "平静物理微动效组件：Scroll Area",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/scroll-area.json"
+  },
+  {
+    "name": "search-field",
+    "title": "Search Field",
+    "description": "平静物理微动效组件：Search Field",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/search-field.json"
+  },
+  {
+    "name": "segmented-control",
+    "title": "Segmented Control",
+    "description": "平静物理微动效组件：Segmented Control",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/segmented-control.json"
+  },
+  {
+    "name": "select",
+    "title": "Select",
+    "description": "平静物理微动效组件：Select",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/select.json"
+  },
+  {
+    "name": "shortcut-recorder",
+    "title": "Shortcut Recorder",
+    "description": "平静物理微动效组件：Shortcut Recorder",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/shortcut-recorder.json"
+  },
+  {
+    "name": "signature-pad",
+    "title": "Signature Pad",
+    "description": "平静物理微动效组件：Signature Pad",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/signature-pad.json"
+  },
+  {
+    "name": "skeleton",
+    "title": "Skeleton",
+    "description": "平静物理微动效组件：Skeleton",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/skeleton.json"
+  },
+  {
+    "name": "slider",
+    "title": "Slider",
+    "description": "平静物理微动效组件：Slider",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/slider.json"
+  },
+  {
+    "name": "slope-chart",
+    "title": "Slope Chart",
+    "description": "平静物理微动效组件：Slope Chart",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/slope-chart.json"
+  },
+  {
+    "name": "slot-text",
+    "title": "Slot Text",
+    "description": "平静物理微动效组件：Slot Text",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/slot-text.json"
+  },
+  {
+    "name": "sortable-data-table",
+    "title": "Sortable Data Table",
+    "description": "平静物理微动效组件：Sortable Data Table",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/sortable-data-table.json"
+  },
+  {
+    "name": "sparkline",
+    "title": "Sparkline",
+    "description": "平静物理微动效组件：Sparkline",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/sparkline.json"
+  },
+  {
+    "name": "split-button",
+    "title": "Split Button",
+    "description": "平静物理微动效组件：Split Button",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/split-button.json"
+  },
+  {
+    "name": "stepper",
+    "title": "Stepper",
+    "description": "平静物理微动效组件：Stepper",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/stepper.json"
+  },
+  {
+    "name": "streamgraph",
+    "title": "Streamgraph",
+    "description": "平静物理微动效组件：Streamgraph",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/streamgraph.json"
+  },
+  {
+    "name": "swipe-actions",
+    "title": "Swipe Actions",
+    "description": "平静物理微动效组件：Swipe Actions",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/swipe-actions.json"
+  },
+  {
+    "name": "switch",
+    "title": "Switch",
+    "description": "平静物理微动效组件：Switch",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/switch.json"
+  },
+  {
+    "name": "tabs",
+    "title": "Tabs",
+    "description": "平静物理微动效组件：Tabs",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/tabs.json"
+  },
+  {
+    "name": "tag-input",
+    "title": "Tag Input",
+    "description": "平静物理微动效组件：Tag Input",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/tag-input.json"
+  },
+  {
+    "name": "text-morph",
+    "title": "Text Morph",
+    "description": "平静物理微动效组件：Text Morph",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/text-morph.json"
+  },
+  {
+    "name": "text-reveal",
+    "title": "Text Reveal",
+    "description": "平静物理微动效组件：Text Reveal",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/text-reveal.json"
+  },
+  {
+    "name": "text-shimmer",
+    "title": "Text Shimmer",
+    "description": "平静物理微动效组件：Text Shimmer",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/text-shimmer.json"
+  },
+  {
+    "name": "textarea",
+    "title": "Textarea",
+    "description": "平静物理微动效组件：Textarea",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/textarea.json"
+  },
+  {
+    "name": "theme-switch",
+    "title": "Theme Switch",
+    "description": "平静物理微动效组件：Theme Switch",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/theme-switch.json"
+  },
+  {
+    "name": "time-picker",
+    "title": "Time Picker",
+    "description": "平静物理微动效组件：Time Picker",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/time-picker.json"
+  },
+  {
+    "name": "timeline",
+    "title": "Timeline",
+    "description": "平静物理微动效组件：Timeline",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/timeline.json"
+  },
+  {
+    "name": "toast",
+    "title": "Toast",
+    "description": "平静物理微动效组件：Toast",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/toast.json"
+  },
+  {
+    "name": "toast-stack",
+    "title": "Toast Stack",
+    "description": "平静物理微动效组件：Toast Stack",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/toast-stack.json"
+  },
+  {
+    "name": "tooltip",
+    "title": "Tooltip",
+    "description": "平静物理微动效组件：Tooltip",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/tooltip.json"
+  },
+  {
+    "name": "tree-view",
+    "title": "Tree View",
+    "description": "平静物理微动效组件：Tree View",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/tree-view.json"
+  },
+  {
+    "name": "treemap",
+    "title": "Treemap",
+    "description": "平静物理微动效组件：Treemap",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/treemap.json"
+  },
+  {
+    "name": "usage-meter",
+    "title": "Usage Meter",
+    "description": "平静物理微动效组件：Usage Meter",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/usage-meter.json"
+  },
+  {
+    "name": "user-menu",
+    "title": "User Menu",
+    "description": "平静物理微动效组件：User Menu",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/user-menu.json"
+  },
+  {
+    "name": "waffle-chart",
+    "title": "Waffle Chart",
+    "description": "平静物理微动效组件：Waffle Chart",
+    "url": "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/waffle-chart.json"
+  }
+]

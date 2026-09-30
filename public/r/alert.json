@@ -1,0 +1,37 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "alert",
+  "type": "registry:ui",
+  "title": "Alert",
+  "description": "平静物理微动效组件：Alert",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/alert/Alert.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/alert/Alert.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport {\n  Info as InfoCircle,\n  Check,\n  TriangleAlert as WarningTriangle,\n  CircleX as XmarkCircle,\n  X,\n} from \"lucide-vue-next\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./alert.module.css\";\n\nexport type AlertTone = \"info\" | \"success\" | \"warning\" | \"danger\";\n\nexport interface AlertProps {\n  tone?: AlertTone;\n  title: string;\n  open?: boolean;\n  onDismiss?: () => void;\n  class?: any;\n}\n\nconst props = withDefaults(defineProps<AlertProps>(), {\n  tone: \"info\",\n  open: true,\n});\n\nconst emit = defineEmits<{\n  (e: \"dismiss\"): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\nconst visible = ref(props.open);\n\nconst icons = {\n  info: InfoCircle,\n  success: Check,\n  warning: WarningTriangle,\n  danger: XmarkCircle,\n};\n\nconst currentIcon = computed(() => icons[props.tone] || InfoCircle);\n\nfunction handleDismiss() {\n  visible.value = false;\n  emit(\"dismiss\");\n  props.onDismiss?.();\n}\n</script>\n\n<template>\n  <AnimatePresence>\n    <motion.div\n      v-if=\"visible\"\n      :class=\"[styles.alert, styles[tone], props.class]\"\n      role=\"alert\"\n      :initial=\"{ opacity: 0, height: 0, scale: 0.98 }\"\n      :animate=\"{\n        opacity: 1,\n        height: 'auto',\n        scale: 1,\n        transition: prefersReduced\n          ? { duration: 0.1 }\n          : motionTokens.spring.smooth,\n      }\"\n      :exit=\"{\n        opacity: 0,\n        height: 0,\n        scale: 0.96,\n        transition: {\n          duration: prefersReduced ? 0 : motionTokens.duration.fast,\n          ease: [...motionTokens.ease.standard],\n        },\n      }\"\n    >\n      <div :class=\"styles.iconWrap\">\n        <AnimatePresence mode=\"popLayout\" :initial=\"false\">\n          <motion.div\n            :key=\"tone\"\n            :initial=\"{ opacity: 0, scale: 0.6, filter: `blur(${motionTokens.blur.subtle}px)` }\"\n            :animate=\"{ opacity: 1, scale: 1, filter: 'blur(0px)' }\"\n            :exit=\"{ opacity: 0, scale: 0.6, filter: `blur(${motionTokens.blur.subtle}px)` }\"\n            :transition=\"prefersReduced ? { duration: 0 } : motionTokens.spring.snappy\"\n            :class=\"styles.icon\"\n          >\n            <component :is=\"currentIcon\" :size=\"16\" />\n          </motion.div>\n        </AnimatePresence>\n      </div>\n\n      <div :class=\"styles.content\">\n        <div :class=\"styles.titleWrap\">\n          <AnimatePresence mode=\"popLayout\" :initial=\"false\">\n            <motion.h4\n              :key=\"title\"\n              :class=\"styles.title\"\n              :initial=\"{ opacity: 0, y: '0.3em', filter: `blur(${motionTokens.blur.soft}px)` }\"\n              :animate=\"{ opacity: 1, y: '0em', filter: 'blur(0px)' }\"\n              :exit=\"{ opacity: 0, y: '-0.3em', filter: `blur(${motionTokens.blur.subtle}px)` }\"\n              :transition=\"prefersReduced ? { duration: 0 } : motionTokens.spring.smooth\"\n            >\n              {{ title }}\n            </motion.h4>\n          </AnimatePresence>\n        </div>\n        <div v-if=\"$slots.default\" :class=\"styles.description\">\n          <slot />\n        </div>\n      </div>\n\n      <button\n        v-if=\"onDismiss || $attrs.onDismiss\"\n        type=\"button\"\n        :class=\"styles.dismiss\"\n        aria-label=\"Dismiss alert\"\n        @click=\"handleDismiss\"\n      >\n        <X :size=\"14\" aria-hidden=\"true\" />\n      </button>\n    </motion.div>\n  </AnimatePresence>\n</template>\n"
+    },
+    {
+      "path": "registry/components/alert/alert.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/alert/alert.module.css",
+      "content": ".presence { min-width: 0; }\n.alert { display: flex; align-items: start; gap: var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-control); padding: var(--space-4); background: var(--surface); box-shadow: var(--shadow-resting); }\n.icon, .glyph { position: relative; display: grid; flex: 0 0 auto; place-items: center; }\n.icon { width: 18px; height: 18px; margin-top: 1px; }\n.icon svg { display: block; }\n.copy { flex: 1; min-width: 0; }\n.content { position: relative; }\n.title { position: relative; display: block; font-size: var(--text-sm); font-weight: 500; }\n.line { display: block; }\n.description { position: relative; margin: var(--space-1) 0 0; color: var(--text-secondary); font-size: var(--text-xs); }\n.info .icon { color: var(--accent); } .success .icon { color: var(--success); } .warning .icon { color: var(--warning); } .danger .icon { color: var(--danger); }\n.dismiss { display: grid; width: 28px; height: 28px; flex: 0 0 auto; place-items: center; margin: -5px -6px -5px 0; border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--text-muted); cursor: pointer; transition: transform var(--duration-spring) var(--ease-spring), background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard); }\n.dismiss:active { transform: scale(.96); transition-duration: var(--duration-instant); transition-timing-function: var(--ease-standard); }\n.dismiss:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }\n@media (hover: hover) and (pointer: fine) { .dismiss:hover { background: var(--surface-muted); color: var(--foreground); } }\n@media (prefers-reduced-motion: reduce) { .dismiss { transition: none; } .dismiss:active { transform: none; } }\n"
+    },
+    {
+      "path": "registry/components/alert/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/alert/index.ts",
+      "content": "export { default as Alert } from \"./Alert.vue\";\nexport * from \"./Alert.vue\";\n"
+    }
+  ]
+}

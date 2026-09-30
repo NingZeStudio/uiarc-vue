@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "checkbox",
+  "type": "registry:ui",
+  "title": "Checkbox",
+  "description": "平静物理微动效组件：Checkbox",
+  "categories": [
+    "ui"
+  ],
+  "dependencies": [
+    "motion-v"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/NingZeStudio/uiarc-vue/main/public/r/arc-foundation.json"
+  ],
+  "files": [
+    {
+      "path": "registry/components/checkbox/Checkbox.vue",
+      "type": "registry:ui",
+      "target": "~/components/ui/checkbox/Checkbox.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from \"vue\";\nimport { motion, AnimatePresence } from \"motion-v\";\nimport { motionTokens } from \"@/registry/motion-tokens\";\nimport { useReducedMotion } from \"@/registry/composables/use-reduced-motion\";\nimport styles from \"./checkbox.module.css\";\n\nexport type CheckedState = boolean | \"indeterminate\";\n\nexport interface CheckboxProps {\n  modelValue?: CheckedState;\n  disabled?: boolean;\n  label?: string;\n  description?: string;\n}\n\nconst props = withDefaults(defineProps<CheckboxProps>(), {\n  modelValue: false,\n  disabled: false,\n});\n\nconst emit = defineEmits<{\n  (e: \"update:modelValue\", val: CheckedState): void;\n  (e: \"change\", val: CheckedState): void;\n}>();\n\nconst prefersReduced = useReducedMotion();\n\nconst isChecked = computed({\n  get: () => props.modelValue,\n  set: (val: CheckedState) => {\n    emit(\"update:modelValue\", val);\n    emit(\"change\", val);\n  },\n});\n\nconst isOn = computed(() => isChecked.value !== false);\nconst isIndeterminate = computed(() => isChecked.value === \"indeterminate\");\n\nconst checkPath = \"M4.25 9.25 L7.25 12.25 L13.75 5.75\";\nconst dashPath = \"M4.75 9 L9 9 L13.25 9\";\n\nconst toggle = () => {\n  if (props.disabled) return;\n  if (isChecked.value === false) {\n    isChecked.value = true;\n  } else {\n    isChecked.value = false;\n  }\n};\n\nconst handleKeyDown = (e: KeyboardEvent) => {\n  if (e.key === \" \" || e.key === \"Enter\") {\n    e.preventDefault();\n    toggle();\n  }\n};\n</script>\n\n<template>\n  <label\n    :class=\"styles.field\"\n    :data-disabled=\"disabled ? 'true' : undefined\"\n    @click.prevent=\"toggle\"\n  >\n    <button\n      type=\"button\"\n      role=\"checkbox\"\n      :class=\"styles.box\"\n      :aria-checked=\"isIndeterminate ? 'mixed' : isOn\"\n      :disabled=\"disabled\"\n      @keydown=\"handleKeyDown\"\n    >\n      <motion.span\n        :class=\"styles.visual\"\n        :while-tap=\"\n          disabled\n            ? undefined\n            : {\n                scale: 0.9,\n                transition: { duration: motionTokens.duration.instant },\n              }\n        \"\n      >\n        <!-- 激活时的背景填充色平滑显现 -->\n        <AnimatePresence>\n          <motion.span\n            v-if=\"isOn\"\n            :class=\"styles.fill\"\n            :initial=\"{ opacity: 0 }\"\n            :animate=\"{ opacity: 1 }\"\n            :exit=\"{ opacity: 0 }\"\n            :transition=\"{ duration: motionTokens.duration.instant }\"\n          />\n        </AnimatePresence>\n\n        <!-- 矢量对勾动态绘制路径 -->\n        <svg\n          :class=\"styles.mark\"\n          viewBox=\"0 0 18 18\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          stroke-width=\"2\"\n          stroke-linecap=\"round\"\n          stroke-linejoin=\"round\"\n        >\n          <motion.path\n            v-if=\"isOn\"\n            :d=\"isIndeterminate ? dashPath : checkPath\"\n            :initial=\"prefersReduced ? { opacity: 1 } : { pathLength: 0, opacity: 0 }\"\n            :animate=\"prefersReduced ? { opacity: 1 } : { pathLength: 1, opacity: 1 }\"\n            :exit=\"{ opacity: 0 }\"\n            :transition=\"{\n              pathLength: { duration: 0.22, ease: [...motionTokens.ease.standard] },\n              opacity: { duration: motionTokens.duration.instant },\n            }\"\n          />\n        </svg>\n      </motion.span>\n    </button>\n\n    <span v-if=\"label || description || $slots.default\" :class=\"styles.labelWrapper\">\n      <span v-if=\"label || $slots.default\" :class=\"styles.label\">\n        <slot>{{ label }}</slot>\n      </span>\n      <span v-if=\"description\" :class=\"styles.description\">\n        {{ description }}\n      </span>\n    </span>\n  </label>\n</template>\n"
+    },
+    {
+      "path": "registry/components/checkbox/checkbox.module.css",
+      "type": "registry:ui",
+      "target": "~/components/ui/checkbox/checkbox.module.css",
+      "content": ".field {\n  display: inline-flex;\n  align-items: flex-start;\n  gap: var(--space-2);\n  min-width: 0;\n  user-select: none;\n  cursor: pointer;\n}\n\n.box {\n  position: relative;\n  flex: 0 0 auto;\n  display: grid;\n  place-items: center;\n  width: 20px;\n  height: 20px;\n  margin-top: 2px;\n  border: 0;\n  padding: 0;\n  background: transparent;\n  color: var(--control-glyph);\n  cursor: pointer;\n  -webkit-tap-highlight-color: transparent;\n}\n\n.visual {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 18px;\n  height: 18px;\n  border: 1px solid var(--border-strong);\n  border-radius: 5px;\n  background: var(--surface);\n  overflow: hidden;\n  transition:\n    border-color var(--duration-fast) var(--ease-standard),\n    background-color var(--duration-fast) var(--ease-standard);\n}\n\n.box:hover:not(:disabled) .visual {\n  border-color: var(--foreground);\n}\n\n.fill {\n  position: absolute;\n  inset: -1px;\n  border-radius: inherit;\n  background: var(--control-on);\n}\n\n.mark {\n  position: relative;\n  z-index: 1;\n  width: 18px;\n  height: 18px;\n}\n\n.labelWrapper {\n  display: flex;\n  flex-direction: column;\n}\n\n.label {\n  color: var(--foreground);\n  font-size: var(--text-sm);\n  font-weight: 500;\n  line-height: var(--leading-body);\n}\n\n.description {\n  color: var(--text-muted);\n  font-size: var(--text-xs);\n  line-height: var(--leading-body);\n}\n\n.box:disabled,\n.field[data-disabled=\"true\"] {\n  cursor: not-allowed;\n  opacity: 0.45;\n}\n"
+    },
+    {
+      "path": "registry/components/checkbox/index.ts",
+      "type": "registry:ui",
+      "target": "~/components/ui/checkbox/index.ts",
+      "content": "export { default as Checkbox } from \"./Checkbox.vue\";\nexport type { CheckboxProps, CheckedState } from \"./Checkbox.vue\";\n"
+    }
+  ]
+}
